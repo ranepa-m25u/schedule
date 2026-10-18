@@ -553,6 +553,36 @@
       box-shadow: 0 2px 8px rgba(227, 6, 17, 0.4);
     }
 
+    /* Карусель расписания с отслеживанием пальца 1:1 */
+    .slider-viewport {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      touch-action: pan-y;
+      cursor: grab;
+    }
+
+    .slider-viewport.grabbing {
+      cursor: grabbing;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .slider-track {
+      display: flex;
+      width: 100%;
+      align-items: flex-start;
+      transform: translate3d(-100%, 0, 0);
+      will-change: transform;
+    }
+
+    .slider-slide {
+      flex: 0 0 100%;
+      width: 100%;
+      min-width: 100%;
+      box-sizing: border-box;
+    }
+
     /* Пустое состояние */
     .empty-state {
       background: var(--card-bg);
@@ -1296,8 +1326,16 @@
         </div>
       </div>
 
-      <!-- Список занятий -->
-      <div class="lessons-container" id="lessonsContainer"></div>
+      <!-- Список занятий со свайпером реального времени -->
+      <div class="slider-viewport" id="sliderViewport">
+        <div class="slider-track" id="sliderTrack">
+          <div class="slider-slide" id="slidePrev"></div>
+          <div class="slider-slide" id="slideCurrent">
+            <div class="lessons-container" id="lessonsContainer"></div>
+          </div>
+          <div class="slider-slide" id="slideNext"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Секция Заметок -->
@@ -1655,16 +1693,58 @@
       const gotoBtn = document.getElementById("nextLessonGotoBtn");
       gotoBtn.onclick = () => {
         selectedDateKey = nextDateKey;
-        currentDate = new Date(y, m - 1, d);
+        const parts = nextDateKey.split("-").map(Number);
+        currentDate = new Date(parts[0], parts[1] - 1, parts[2]);
         renderDay(selectedDateKey, "calendar");
       };
     }
 
-    // Отрисовка расписания выбранного дня
-    function renderDay(dateKey, direction) {
-      const parts = dateKey.split("-");
-      const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-      
+    // ==========================================
+    // ИНТЕРАКТИВНЫЙ СЛАЙДЕР РАСПИСАНИЯ (СЛЕДИТ ЗА ПАЛЬЦЕМ 1:1)
+    // ==========================================
+    const sliderViewport = document.getElementById("sliderViewport");
+    const sliderTrack = document.getElementById("sliderTrack");
+    const slidePrev = document.getElementById("slidePrev");
+    const slideCurrent = document.getElementById("slideCurrent");
+    const slideNext = document.getElementById("slideNext");
+
+    function getDayLessonsHTML(dateKey) {
+      const dayInfo = SCHEDULE[dateKey];
+      if (!dayInfo || !dayInfo.lessons || dayInfo.lessons.length === 0) {
+        return `
+          <div class="empty-state">
+            <div class="empty-icon">
+              <svg class="svg-ico" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <div class="empty-title">В этот день пар нет!</div>
+            <div class="empty-desc">Отличный день для отдыха, домашних заданий или личных дел.</div>
+          </div>
+        `;
+      }
+
+      return dayInfo.lessons.map(l => `
+        <div class="lesson-card">
+          <div class="lesson-header">
+            <span class="lesson-time">
+              <svg class="svg-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>${l.time}</span>
+            </span>
+            <span class="lesson-type">${l.type || "Занятие"}</span>
+          </div>
+          <div class="lesson-title">${l.subject}</div>
+          <div class="lesson-teacher">
+            <svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>${l.teacher || "Преподаватель не указан"}</span>
+          </div>
+          ${l.link ? `<a href="${l.link}" target="_blank" rel="noopener noreferrer" class="btn-mts">
+            <svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
+            <span>Подключиться к занятию (МТС Линк)</span>
+          </a>` : ""}
+        </div>
+      `).join("");
+    }
+
+    function updateDayHeaders(d) {
       const pad = n => String(n).padStart(2, '0');
       const numericDate = `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
 
@@ -1683,113 +1763,235 @@
         void heroElem.offsetWidth;
         heroElem.classList.add("anim-hero-text");
       }
+    }
 
-      const container = document.getElementById("lessonsContainer");
-      container.classList.remove("anim-slide-left", "anim-slide-right", "anim-fade-scale");
-      void container.offsetWidth;
-      if (direction === "next") {
-        container.classList.add("anim-slide-left");
-      } else if (direction === "prev") {
-        container.classList.add("anim-slide-right");
-      } else if (direction) {
-        container.classList.add("anim-fade-scale");
+    function updateSliderSlides() {
+      const prevDate = new Date(currentDate);
+      prevDate.setDate(prevDate.getDate() - 1);
+      const prevKey = formatDateKey(prevDate);
+
+      const nextDate = new Date(currentDate);
+      nextDate.setDate(nextDate.getDate() + 1);
+      const nextKey = formatDateKey(nextDate);
+
+      const currKey = formatDateKey(currentDate);
+
+      slidePrev.innerHTML = `<div class="lessons-container">${getDayLessonsHTML(prevKey)}</div>`;
+      slideCurrent.innerHTML = `<div class="lessons-container" id="lessonsContainer">${getDayLessonsHTML(currKey)}</div>`;
+      slideNext.innerHTML = `<div class="lessons-container">${getDayLessonsHTML(nextKey)}</div>`;
+
+      slidePrev.style.height = '0';
+      slidePrev.style.overflow = 'hidden';
+      slideNext.style.height = '0';
+      slideNext.style.overflow = 'hidden';
+      slideCurrent.style.height = 'auto';
+      slideCurrent.style.overflow = 'visible';
+
+      sliderTrack.style.transition = 'none';
+      sliderTrack.style.transform = 'translate3d(-100%, 0, 0)';
+    }
+
+    function renderDay(dateKey, mode) {
+      selectedDateKey = dateKey;
+      const parts = dateKey.split("-");
+      currentDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+
+      updateDayHeaders(currentDate);
+      updateSliderSlides();
+      if (mode === "calendar") {
+        slideCurrent.classList.remove("anim-fade-scale");
+        void slideCurrent.offsetWidth;
+        slideCurrent.classList.add("anim-fade-scale");
       }
-
-      container.innerHTML = "";
-
-      const dayInfo = SCHEDULE[dateKey];
-      if (!dayInfo || !dayInfo.lessons || dayInfo.lessons.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">
-              <svg class="svg-ico" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-            </div>
-            <div class="empty-title">В этот день пар нет!</div>
-            <div class="empty-desc">Отличный день для отдыха, домашних заданий или личных дел.</div>
-          </div>
-        `;
-        updateLiveBanner();
-        updateNextLessonCountdown();
-        return;
-      }
-
-      dayInfo.lessons.forEach((l) => {
-        const card = document.createElement("div");
-        card.className = "lesson-card";
-
-        card.innerHTML = `
-          <div class="lesson-header">
-            <span class="lesson-time">
-              <svg class="svg-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              <span>${l.time}</span>
-            </span>
-            <span class="lesson-type">${l.type || "Занятие"}</span>
-          </div>
-          <div class="lesson-title">${l.subject}</div>
-          <div class="lesson-teacher">
-            <svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <span>${l.teacher || "Преподаватель не указан"}</span>
-          </div>
-          ${l.link ? `<a href="${l.link}" target="_blank" rel="noopener noreferrer" class="btn-mts">
-            <svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
-            <span>Подключиться к занятию (МТС Линк)</span>
-          </a>` : ""}
-        `;
-        container.appendChild(card);
-      });
       updateLiveBanner();
       updateNextLessonCountdown();
     }
 
-    // Переключение дней стрелочками
-    document.getElementById("prevDayBtn").addEventListener("click", () => {
-      currentDate.setDate(currentDate.getDate() - 1);
-      selectedDateKey = formatDateKey(currentDate);
-      resetActiveChips();
-      renderDay(selectedDateKey, "prev");
-    });
+    let isSliderAnimating = false;
 
-    document.getElementById("nextDayBtn").addEventListener("click", () => {
-      currentDate.setDate(currentDate.getDate() + 1);
-      selectedDateKey = formatDateKey(currentDate);
-      resetActiveChips();
-      renderDay(selectedDateKey, "next");
-    });
+    function goToNextDay() {
+      if (isSliderAnimating) return;
+      isSliderAnimating = true;
 
-    // Свайп жесты влево/вправо для быстрой перемотки дней на телефоне
+      slideNext.style.height = 'auto';
+      slideNext.style.overflow = 'visible';
+      sliderTrack.style.transition = 'transform 0.28s cubic-bezier(0.16, 1, 0.3, 1)';
+      sliderTrack.style.transform = 'translate3d(-200%, 0, 0)';
+
+      setTimeout(() => {
+        currentDate.setDate(currentDate.getDate() + 1);
+        selectedDateKey = formatDateKey(currentDate);
+        updateDayHeaders(currentDate);
+        updateSliderSlides();
+        updateLiveBanner();
+        updateNextLessonCountdown();
+        isSliderAnimating = false;
+      }, 280);
+    }
+
+    function goToPrevDay() {
+      if (isSliderAnimating) return;
+      isSliderAnimating = true;
+
+      slidePrev.style.height = 'auto';
+      slidePrev.style.overflow = 'visible';
+      sliderTrack.style.transition = 'transform 0.28s cubic-bezier(0.16, 1, 0.3, 1)';
+      sliderTrack.style.transform = 'translate3d(0%, 0, 0)';
+
+      setTimeout(() => {
+        currentDate.setDate(currentDate.getDate() - 1);
+        selectedDateKey = formatDateKey(currentDate);
+        updateDayHeaders(currentDate);
+        updateSliderSlides();
+        updateLiveBanner();
+        updateNextLessonCountdown();
+        isSliderAnimating = false;
+      }, 280);
+    }
+
+    document.getElementById("prevDayBtn").addEventListener("click", goToPrevDay);
+    document.getElementById("nextDayBtn").addEventListener("click", goToNextDay);
+
+    // ==========================================
+    // ТАКТИЛЬНЫЙ СВАЙП: СЛЕЖЕНИЕ ЗА ПАЛЬЦЕМ В РЕАЛЬНОМ ВРЕМЕНИ
+    // ==========================================
     let touchStartX = 0;
     let touchStartY = 0;
     let touchStartTime = 0;
-    const schedSection = document.getElementById("scheduleSection");
-    if (schedSection) {
-      schedSection.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) {
-          touchStartX = e.touches[0].clientX;
-          touchStartY = e.touches[0].clientY;
-          touchStartTime = Date.now();
-        }
-      }, { passive: true });
+    let isDragging = false;
+    let isScrolling = false;
+    let currentDeltaX = 0;
 
-      schedSection.addEventListener('touchend', (e) => {
-        if (e.changedTouches.length === 1) {
-          const diffX = e.changedTouches[0].clientX - touchStartX;
-          const diffY = e.changedTouches[0].clientY - touchStartY;
-          const elapsed = Date.now() - touchStartTime;
+    sliderViewport.addEventListener('touchstart', (e) => {
+      if (isSliderAnimating || e.touches.length > 1) return;
+      const t = e.touches[0];
+      touchStartX = t.clientX;
+      touchStartY = t.clientY;
+      touchStartTime = Date.now();
+      isDragging = false;
+      isScrolling = false;
+      currentDeltaX = 0;
+    }, { passive: true });
 
-          // Четкий намеренный горизонтальный свайп:
-          // 1) Смещение по X больше 40px
-          // 2) Горизонтальное движение преобладает над вертикальным (|diffX| > |diffY| * 1.4)
-          // 3) Длительность менее 550мс (быстрое смахивание, а не медленный скролл)
-          if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.4 && elapsed < 550) {
-            if (diffX > 0) {
-              document.getElementById("prevDayBtn").click();
-            } else {
-              document.getElementById("nextDayBtn").click();
-            }
+    sliderViewport.addEventListener('touchmove', (e) => {
+      if (isSliderAnimating || e.touches.length > 1) return;
+      const t = e.touches[0];
+      const diffX = t.clientX - touchStartX;
+      const diffY = t.clientY - touchStartY;
+
+      if (!isDragging && !isScrolling) {
+        if (Math.abs(diffX) > 8 || Math.abs(diffY) > 8) {
+          if (Math.abs(diffX) > Math.abs(diffY)) {
+            isDragging = true;
+            slidePrev.style.height = 'auto';
+            slidePrev.style.overflow = 'visible';
+            slideNext.style.height = 'auto';
+            slideNext.style.overflow = 'visible';
+          } else {
+            isScrolling = true;
           }
         }
-      }, { passive: true });
-    }
+      }
+
+      if (isDragging) {
+        if (e.cancelable) e.preventDefault();
+        currentDeltaX = diffX;
+        sliderTrack.style.transition = 'none';
+        sliderTrack.style.transform = `translate3d(calc(-100% + ${diffX}px), 0, 0)`;
+      }
+    }, { passive: false });
+
+    sliderViewport.addEventListener('touchend', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      const elapsed = Date.now() - touchStartTime;
+      const threshold = Math.min(window.innerWidth * 0.22, 85);
+      const isQuickFlick = Math.abs(currentDeltaX) > 30 && elapsed < 280;
+
+      if (currentDeltaX < -threshold || (currentDeltaX < -25 && isQuickFlick)) {
+        isSliderAnimating = true;
+        sliderTrack.style.transition = 'transform 0.24s cubic-bezier(0.16, 1, 0.3, 1)';
+        sliderTrack.style.transform = 'translate3d(-200%, 0, 0)';
+        setTimeout(() => {
+          currentDate.setDate(currentDate.getDate() + 1);
+          selectedDateKey = formatDateKey(currentDate);
+          updateDayHeaders(currentDate);
+          updateSliderSlides();
+          updateLiveBanner();
+          updateNextLessonCountdown();
+          isSliderAnimating = false;
+        }, 240);
+      } else if (currentDeltaX > threshold || (currentDeltaX > 25 && isQuickFlick)) {
+        isSliderAnimating = true;
+        sliderTrack.style.transition = 'transform 0.24s cubic-bezier(0.16, 1, 0.3, 1)';
+        sliderTrack.style.transform = 'translate3d(0%, 0, 0)';
+        setTimeout(() => {
+          currentDate.setDate(currentDate.getDate() - 1);
+          selectedDateKey = formatDateKey(currentDate);
+          updateDayHeaders(currentDate);
+          updateSliderSlides();
+          updateLiveBanner();
+          updateNextLessonCountdown();
+          isSliderAnimating = false;
+        }, 240);
+      } else {
+        sliderTrack.style.transition = 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
+        sliderTrack.style.transform = 'translate3d(-100%, 0, 0)';
+        setTimeout(() => {
+          slidePrev.style.height = '0';
+          slidePrev.style.overflow = 'hidden';
+          slideNext.style.height = '0';
+          slideNext.style.overflow = 'hidden';
+        }, 200);
+      }
+    }, { passive: true });
+
+    // Поддержка перетаскивания мышью на компьютере
+    let isMouseDown = false;
+    sliderViewport.addEventListener('mousedown', (e) => {
+      if (isSliderAnimating || e.button !== 0) return;
+      if (e.target.closest('a, button, input')) return;
+      isMouseDown = true;
+      touchStartX = e.clientX;
+      touchStartTime = Date.now();
+      currentDeltaX = 0;
+      slidePrev.style.height = 'auto';
+      slidePrev.style.overflow = 'visible';
+      slideNext.style.height = 'auto';
+      slideNext.style.overflow = 'visible';
+      sliderViewport.classList.add('grabbing');
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isMouseDown) return;
+      currentDeltaX = e.clientX - touchStartX;
+      sliderTrack.style.transition = 'none';
+      sliderTrack.style.transform = `translate3d(calc(-100% + ${currentDeltaX}px), 0, 0)`;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isMouseDown) return;
+      isMouseDown = false;
+      sliderViewport.classList.remove('grabbing');
+      const elapsed = Date.now() - touchStartTime;
+      const threshold = 70;
+      const isQuickFlick = Math.abs(currentDeltaX) > 30 && elapsed < 280;
+
+      if (currentDeltaX < -threshold || (currentDeltaX < -25 && isQuickFlick)) {
+        goToNextDay();
+      } else if (currentDeltaX > threshold || (currentDeltaX > 25 && isQuickFlick)) {
+        goToPrevDay();
+      } else {
+        sliderTrack.style.transition = 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
+        sliderTrack.style.transform = 'translate3d(-100%, 0, 0)';
+        setTimeout(() => {
+          slidePrev.style.height = '0';
+          slidePrev.style.overflow = 'hidden';
+          slideNext.style.height = '0';
+          slideNext.style.overflow = 'hidden';
+        }, 200);
+      }
+    });
 
     function resetActiveChips() {}
 
