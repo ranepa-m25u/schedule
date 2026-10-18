@@ -443,23 +443,26 @@
       display: block;
     }
 
-    .note-input-wrap {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
+    .note-card-form {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
     }
 
     .note-input {
-      flex: 1;
-      height: 46px;
+      width: 100%;
+      height: 44px;
       padding: 0 14px;
-      border-radius: 14px;
+      border-radius: 12px;
       border: 1px solid var(--line);
-      background: var(--card-bg);
+      background: var(--chip-bg);
       color: var(--fg);
       font-size: 15px;
       outline: none;
-      box-shadow: var(--shadow);
+      margin-bottom: 12px;
       transition: border-color 0.2s;
     }
 
@@ -467,22 +470,85 @@
       border-color: var(--accent);
     }
 
+    .note-time-bar {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .time-inp-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--chip-bg);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 6px 12px;
+    }
+
+    .time-inp-pill span {
+      font-size: 16px;
+    }
+
+    .note-datetime-inp {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      color: var(--fg);
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .quick-pill-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .quick-pill {
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      background: var(--chip-bg);
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .quick-pill.selected {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
     .btn-add {
-      height: 46px;
-      padding: 0 18px;
-      border-radius: 14px;
+      width: 100%;
+      height: 44px;
+      border-radius: 12px;
       border: 0;
       background: var(--accent);
       color: #fff;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 14px;
       cursor: pointer;
       box-shadow: 0 4px 14px rgba(229, 57, 53, 0.35);
       transition: transform 0.12s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
     .btn-add:active {
-      transform: scale(0.95);
+      transform: scale(0.97);
     }
 
     .note-item {
@@ -493,14 +559,45 @@
       margin-bottom: 10px;
       box-shadow: var(--shadow);
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
       transition: all 0.2s ease;
+    }
+
+    .note-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .note-text {
+      font-size: 15px;
+      font-weight: 600;
+      word-break: break-word;
+      line-height: 1.35;
+      color: var(--fg);
     }
 
     .note-item.done .note-text {
       text-decoration: line-through;
       color: var(--muted);
+    }
+
+    .note-time-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-top: 6px;
+    }
+
+    .note-time-badge.fired {
+      color: var(--muted);
+      background: var(--chip-bg);
     }
 
     .note-checkbox {
@@ -515,18 +612,12 @@
       font-size: 12px;
       transition: all 0.15s;
       flex-shrink: 0;
+      margin-top: 1px;
     }
 
     .note-item.done .note-checkbox {
       background: var(--success);
       border-color: var(--success);
-    }
-
-    .note-text {
-      flex: 1;
-      font-size: 15px;
-      font-weight: 500;
-      word-break: break-word;
     }
 
     .btn-del-note {
@@ -535,7 +626,7 @@
       color: var(--muted);
       cursor: pointer;
       font-size: 18px;
-      padding: 4px;
+      padding: 2px 4px;
       border-radius: 8px;
       opacity: 0.6;
       transition: opacity 0.15s;
@@ -880,10 +971,27 @@
 
     <!-- Секция Заметок -->
     <div id="notesSection" class="notes-section">
-      <div class="note-input-wrap">
-        <input type="text" class="note-input" id="noteInput" placeholder="Новая заметка или задание..." />
-        <button class="btn-add" id="addNoteBtn">Добавить</button>
+      <div class="note-card-form">
+        <input type="text" class="note-input" id="noteInput" placeholder="Что нужно сделать или сдать?" />
+        
+        <div class="note-time-bar">
+          <div class="time-inp-pill">
+            <span>⏰</span>
+            <input type="datetime-local" class="note-datetime-inp" id="noteDatetimeInp" title="Выбрать время напоминания" />
+          </div>
+          <div class="quick-pill-row">
+            <button type="button" class="quick-pill" data-min="60">+1 час</button>
+            <button type="button" class="quick-pill" data-min="180">+3 часа</button>
+            <button type="button" class="quick-pill" data-target="tomorrow-9">Завтра 9:00</button>
+            <button type="button" class="quick-pill" data-target="tomorrow-18">Завтра 18:00</button>
+          </div>
+        </div>
+
+        <button class="btn-add" id="addNoteBtn">
+          <span>➕ Добавить заметку</span>
+        </button>
       </div>
+
       <div id="notesListContainer"></div>
     </div>
   </div>
@@ -1517,7 +1625,76 @@
       renderNotes();
     });
 
-    // Логика Заметок (localStorage)
+    // ==========================================
+    // ЛОГИКА ЗАМЕТОК С НАПОМИНАНИЕМ ПО ВРЕМЕНИ
+    // ==========================================
+    function playChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.35, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.5);
+      } catch(e) {}
+    }
+
+    function formatRemindBadge(isoStr) {
+      if (!isoStr) return "";
+      const d = new Date(isoStr);
+      const day = d.getDate();
+      const month = MONTH_NAMES[d.getMonth()];
+      const h = String(d.getHours()).padStart(2, '0');
+      const m = String(d.getMinutes()).padStart(2, '0');
+      return `${day} ${month} в ${h}:${m}`;
+    }
+
+    // Быстрые кнопки установки времени
+    document.querySelectorAll(".quick-pill").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const inp = document.getElementById("noteDatetimeInp");
+        const wasSelected = btn.classList.contains("selected");
+        document.querySelectorAll(".quick-pill").forEach(b => b.classList.remove("selected"));
+
+        if (wasSelected) {
+          inp.value = "";
+          return;
+        }
+
+        btn.classList.add("selected");
+        const now = new Date();
+
+        if (btn.dataset.min) {
+          const target = new Date(now.getTime() + parseInt(btn.dataset.min) * 60000);
+          setDatetimeInp(target);
+        } else if (btn.dataset.target === "tomorrow-9") {
+          const tom = new Date(now);
+          tom.setDate(tom.getDate() + 1);
+          tom.setHours(9, 0, 0, 0);
+          setDatetimeInp(tom);
+        } else if (btn.dataset.target === "tomorrow-18") {
+          const tom = new Date(now);
+          tom.setDate(tom.getDate() + 1);
+          tom.setHours(18, 0, 0, 0);
+          setDatetimeInp(tom);
+        }
+      });
+    });
+
+    function setDatetimeInp(d) {
+      const pad = (n) => String(n).padStart(2, "0");
+      const localIso = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      document.getElementById("noteDatetimeInp").value = localIso;
+    }
+
     function getStoredNotes() {
       try {
         return JSON.parse(localStorage.getItem("ranepa_notes") || "[]");
@@ -1549,9 +1726,20 @@
       notes.forEach((n, idx) => {
         const item = document.createElement("div");
         item.className = `note-item ${n.done ? "done" : ""}`;
+        
+        let timeBadgeHtml = "";
+        if (n.remindAt) {
+          const badgeText = n.reminded ? "✓ Напомнено" : `🔔 ${formatRemindBadge(n.remindAt)}`;
+          const badgeClass = n.reminded ? "note-time-badge fired" : "note-time-badge";
+          timeBadgeHtml = `<div class="${badgeClass}">${badgeText}</div>`;
+        }
+
         item.innerHTML = `
           <div class="note-checkbox">${n.done ? "✓" : ""}</div>
-          <div class="note-text">${n.text}</div>
+          <div class="note-content">
+            <div class="note-text">${n.text}</div>
+            ${timeBadgeHtml}
+          </div>
           <button class="btn-del-note" title="Удалить">✕</button>
         `;
 
@@ -1579,15 +1767,69 @@
 
     function addNote() {
       const inp = document.getElementById("noteInput");
+      const timeInp = document.getElementById("noteDatetimeInp");
       const text = inp.value.trim();
       if (!text) return;
 
+      const remindAt = timeInp.value ? new Date(timeInp.value).toISOString() : null;
+
+      // Если указано время, но пуши еще не разрешены — запросим разрешение
+      if (remindAt && "Notification" in window && Notification.permission !== "granted") {
+        Notification.requestPermission();
+      }
+
       const notes = getStoredNotes();
-      notes.unshift({ text, done: false, date: new Date().toISOString() });
+      notes.unshift({
+        id: Date.now() + Math.random(),
+        text: text,
+        done: false,
+        createdAt: new Date().toISOString(),
+        remindAt: remindAt,
+        reminded: false
+      });
+
       saveNotes(notes);
       inp.value = "";
+      timeInp.value = "";
+      document.querySelectorAll(".quick-pill").forEach(b => b.classList.remove("selected"));
       renderNotes();
+      showToast(remindAt ? "✅ Заметка с напоминанием сохранена!" : "✅ Заметка сохранена!");
     }
+
+    // Проверка напоминаний по заметкам каждые 10 секунд
+    function checkNoteReminders() {
+      const notes = getStoredNotes();
+      let changed = false;
+      const now = new Date();
+
+      notes.forEach(n => {
+        if (n.remindAt && !n.reminded && !n.done) {
+          const rDate = new Date(n.remindAt);
+          if (rDate <= now) {
+            n.reminded = true;
+            changed = true;
+
+            playChime();
+            showToast(`⏰ Напоминание: ${n.text}`);
+
+            if ("Notification" in window && Notification.permission === "granted") {
+              const notif = new Notification("⏰ Напоминание по заметке!", {
+                body: `📌 ${n.text}`,
+                icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>"
+              });
+              notif.onclick = () => window.focus();
+            }
+          }
+        }
+      });
+
+      if (changed) {
+        saveNotes(notes);
+        renderNotes();
+      }
+    }
+
+    setInterval(checkNoteReminders, 10000);
 
     // Регистрация Service Worker для оффлайн работы
     if ('serviceWorker' in navigator) {
