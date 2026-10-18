@@ -215,65 +215,132 @@
       box-shadow: 0 4px 10px rgba(229, 57, 53, 0.3);
     }
 
-    /* Навигация по датам */
+    /* Навигация по датам (стиль как в референсе) */
     .date-navigator {
       background: var(--card-bg);
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      padding: 14px;
+      padding: 12px 14px 14px;
       box-shadow: var(--shadow);
       margin-bottom: 16px;
     }
 
-    .date-row {
+    .date-nav-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 8px;
+      width: 100%;
     }
 
-    .date-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 11px;
+    .nav-arrow-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 9px 12px;
+      border-radius: 12px;
       border: 1px solid var(--line);
       background: var(--chip-bg);
       color: var(--fg);
-      display: grid;
-      place-items: center;
+      font-size: 13px;
+      font-weight: 600;
       cursor: pointer;
-      font-size: 16px;
       transition: all 0.15s ease;
+      white-space: nowrap;
+      user-select: none;
+      flex-shrink: 0;
     }
 
-    .date-btn:active {
-      transform: scale(0.92);
+    .nav-arrow-btn:active {
+      transform: scale(0.95);
+      background: var(--hover-bg);
     }
 
-    .date-display {
-      text-align: center;
-      cursor: pointer;
+    .nav-center-btn {
       flex: 1;
-      padding: 4px 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 12px;
       border-radius: 12px;
-      transition: background 0.15s;
-    }
-
-    .date-display:active {
+      border: 1px solid var(--line);
       background: var(--chip-bg);
+      color: var(--fg);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+      text-align: center;
+      min-width: 0;
     }
 
-    .date-dayname {
-      font-size: 18px;
+    .nav-center-btn:active {
+      transform: scale(0.97);
+      background: var(--hover-bg);
+    }
+
+    .nav-date-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-chevron {
+      font-size: 14px;
+      opacity: 0.6;
+    }
+
+    .nav-cal-icon {
+      font-size: 14px;
+    }
+
+    .nav-label-short {
+      display: none;
+    }
+
+    .nav-label-long {
+      display: inline;
+    }
+
+    @media (max-width: 520px) {
+      .nav-label-long {
+        display: none;
+      }
+      .nav-label-short {
+        display: inline;
+      }
+      .nav-arrow-btn {
+        padding: 9px 10px;
+        font-size: 12px;
+      }
+      .nav-center-btn {
+        padding: 9px 8px;
+        font-size: 12px;
+        justify-content: space-between;
+      }
+    }
+
+    .date-hero {
+      text-align: center;
+      padding: 14px 0 6px;
+    }
+
+    .date-numeric {
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--fg);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
+    .date-weekday {
+      font-size: 17px;
       font-weight: 800;
       color: var(--accent);
-    }
-
-    .date-formatted {
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 600;
-      margin-top: 2px;
+      margin-top: 5px;
     }
 
     /* Быстрые фильтры */
@@ -969,15 +1036,31 @@
 
     <!-- Секция Расписания -->
     <div id="scheduleSection">
-      <!-- Навигатор по датам -->
+      <!-- Навигатор по датам (как в референсе) -->
       <div class="date-navigator">
-        <div class="date-row">
-          <button class="date-btn" id="prevDayBtn">‹</button>
-          <div class="date-display" id="dateModalTrigger" title="Открыть календарь">
-            <div class="date-dayname" id="dayNameDisplay">Вторник</div>
-            <div class="date-formatted" id="dateFormattedDisplay">20 октября 2026 ▾</div>
-          </div>
-          <button class="date-btn" id="nextDayBtn">›</button>
+        <div class="date-nav-bar">
+          <button class="nav-arrow-btn" id="prevDayBtn" title="Предыдущий день">
+            <span class="nav-chevron">‹</span>
+            <span class="nav-label-long">Предыдущий день</span>
+            <span class="nav-label-short">Пред.</span>
+          </button>
+
+          <button class="nav-center-btn" id="dateModalTrigger" title="Выбрать дату в календаре">
+            <span class="nav-cal-icon">📅</span>
+            <span class="nav-date-text" id="navDateText">20 октября 2026 г.</span>
+            <span class="nav-chevron">›</span>
+          </button>
+
+          <button class="nav-arrow-btn" id="nextDayBtn" title="Следующий день">
+            <span class="nav-label-long">Следующий день</span>
+            <span class="nav-label-short">След.</span>
+            <span class="nav-chevron">›</span>
+          </button>
+        </div>
+
+        <div class="date-hero">
+          <div class="date-numeric" id="dateNumericDisplay">20.10.2026</div>
+          <div class="date-weekday" id="dayNameDisplay">Вторник</div>
         </div>
 
         <div class="quick-chips">
@@ -1271,8 +1354,17 @@
       const parts = dateKey.split("-");
       const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
       
-      document.getElementById("dayNameDisplay").textContent = DAY_NAMES[d.getDay()];
-      document.getElementById("dateFormattedDisplay").textContent = `${d.getDate()} ${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()} ▾`;
+      const pad = n => String(n).padStart(2, '0');
+      const numericDate = `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
+
+      const dayNameElem = document.getElementById("dayNameDisplay");
+      if (dayNameElem) dayNameElem.textContent = DAY_NAMES[d.getDay()];
+
+      const numDateElem = document.getElementById("dateNumericDisplay");
+      if (numDateElem) numDateElem.textContent = numericDate;
+
+      const navTextElem = document.getElementById("navDateText");
+      if (navTextElem) navTextElem.textContent = `${d.getDate()} ${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()} г.`;
 
       const container = document.getElementById("lessonsContainer");
       container.innerHTML = "";
@@ -1325,6 +1417,29 @@
       renderDay(selectedDateKey);
     });
 
+    // Свайп жесты влево/вправо для быстрой перемотки дней на телефоне
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const schedSection = document.getElementById("scheduleSection");
+    if (schedSection) {
+      schedSection.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+      }, { passive: true });
+
+      schedSection.addEventListener('touchend', (e) => {
+        const diffX = e.changedTouches[0].screenX - touchStartX;
+        const diffY = e.changedTouches[0].screenY - touchStartY;
+        if (Math.abs(diffX) > 50 && Math.abs(diffY) < 60) {
+          if (diffX > 0) {
+            document.getElementById("prevDayBtn").click();
+          } else {
+            document.getElementById("nextDayBtn").click();
+          }
+        }
+      }, { passive: true });
+    }
+
     function resetActiveChips() {
       document.querySelectorAll(".quick-chips .chip").forEach(c => c.classList.remove("active"));
     }
@@ -1354,8 +1469,12 @@
     });
 
     function renderAllSchedule() {
-      document.getElementById("dayNameDisplay").textContent = "Все занятия";
-      document.getElementById("dateFormattedDisplay").textContent = "Полный список на месяц";
+      const numDateElem = document.getElementById("dateNumericDisplay");
+      if (numDateElem) numDateElem.textContent = "Все дни";
+      const dayNameElem = document.getElementById("dayNameDisplay");
+      if (dayNameElem) dayNameElem.textContent = "Полный список занятий";
+      const navTextElem = document.getElementById("navDateText");
+      if (navTextElem) navTextElem.textContent = "Весь октябрь 2026 г.";
       const container = document.getElementById("lessonsContainer");
       container.innerHTML = "";
 
