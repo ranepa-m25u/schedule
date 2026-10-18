@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ranepa-m25u-v13';
+const CACHE_NAME = 'ranepa-m25u-v14';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
