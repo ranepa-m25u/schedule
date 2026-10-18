@@ -325,7 +325,7 @@
 
     .date-hero {
       text-align: center;
-      padding: 14px 0 6px;
+      padding: 14px 0 2px;
     }
 
     .date-numeric {
@@ -341,36 +341,6 @@
       font-weight: 800;
       color: var(--accent);
       margin-top: 5px;
-    }
-
-    /* Быстрые фильтры */
-    .quick-chips {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--line);
-    }
-
-    .chip {
-      flex: 1;
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      border: 1px solid var(--line);
-      background: var(--chip-bg);
-      color: var(--chip-fg);
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.15s ease;
-    }
-
-    .chip.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-      box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
     }
 
     /* Список занятий */
@@ -1062,12 +1032,6 @@
           <div class="date-numeric" id="dateNumericDisplay">20.10.2026</div>
           <div class="date-weekday" id="dayNameDisplay">Вторник</div>
         </div>
-
-        <div class="quick-chips">
-          <button class="chip active" id="chipToday">Сегодня</button>
-          <button class="chip" id="chipTomorrow">Завтра</button>
-          <button class="chip" id="chipAll">Все дни</button>
-        </div>
       </div>
 
       <!-- Список занятий -->
@@ -1440,33 +1404,7 @@
       }, { passive: true });
     }
 
-    function resetActiveChips() {
-      document.querySelectorAll(".quick-chips .chip").forEach(c => c.classList.remove("active"));
-    }
-
-    // Кнопки быстрых фильтров
-    document.getElementById("chipToday").addEventListener("click", (e) => {
-      resetActiveChips();
-      e.target.classList.add("active");
-      currentDate = new Date();
-      selectedDateKey = formatDateKey(currentDate);
-      renderDay(selectedDateKey);
-    });
-
-    document.getElementById("chipTomorrow").addEventListener("click", (e) => {
-      resetActiveChips();
-      e.target.classList.add("active");
-      currentDate = new Date();
-      currentDate.setDate(currentDate.getDate() + 1);
-      selectedDateKey = formatDateKey(currentDate);
-      renderDay(selectedDateKey);
-    });
-
-    document.getElementById("chipAll").addEventListener("click", (e) => {
-      resetActiveChips();
-      e.target.classList.add("active");
-      renderAllSchedule();
-    });
+    function resetActiveChips() {}
 
     function renderAllSchedule() {
       const numDateElem = document.getElementById("dateNumericDisplay");
