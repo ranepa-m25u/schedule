@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>РАНХиГС М25-У • Расписание</title>
   
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -20,7 +20,7 @@
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --fg: #0f172a;
-      --muted: #64748b;
+      --muted: #475569;
       --line: #e2e8f0;
       --accent: #e53935;
       --accent-soft: rgba(229, 57, 53, 0.1);
@@ -39,8 +39,8 @@
       --bg: #0b0f17;
       --card-bg: #141a26;
       --fg: #f1f5f9;
-      --muted: #94a3b8;
-      --line: #222b3c;
+      --muted: #b0bed6;
+      --line: #222d40;
       --accent: #ff5252;
       --accent-soft: rgba(255, 82, 82, 0.15);
       --accent-hover: #ff7b7b;
@@ -337,10 +337,100 @@
     }
 
     .date-weekday {
-      font-size: 17px;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--fg);
+      margin-top: 5px;
+    }
+
+    /* Карточка обратного отсчета / ближайшей пары */
+    .countdown-card {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 13px 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .countdown-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .countdown-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .countdown-subject {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--fg);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .countdown-meta {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .countdown-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .countdown-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
       font-weight: 800;
       color: var(--accent);
-      margin-top: 5px;
+      background: var(--accent-soft);
+      padding: 4px 9px;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+
+    .countdown-goto-btn {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      background: var(--chip-bg);
+      border: 1px solid var(--line);
+      padding: 3px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .countdown-goto-btn:active {
+      transform: scale(0.95);
+    }
+
+    .svg-ico {
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
     }
 
     /* Список занятий */
@@ -387,12 +477,18 @@
     }
 
     .lesson-time {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--accent);
-      background: var(--accent-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--fg);
+      background: var(--chip-bg);
+      border: 1px solid var(--line);
       padding: 4px 10px;
       border-radius: 8px;
+      letter-spacing: -0.2px;
+    }
       letter-spacing: -0.2px;
     }
 
@@ -977,7 +1073,9 @@
     <!-- Шапка -->
     <header>
       <div class="brand-wrap">
-        <div class="logo-badge">🎓</div>
+        <div class="logo-badge">
+          <svg class="svg-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
         <div>
           <div class="brand-title">РАНХиГС • М25-У</div>
           <div class="brand-subtitle">Учебное расписание</div>
@@ -985,28 +1083,33 @@
       </div>
       <div class="header-actions">
         <button class="btn-icon" id="notifBtn" title="Напоминания и уведомления">
-          <span>🔔</span>
+          <svg class="svg-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span class="notif-dot" id="notifDot"></span>
         </button>
-        <button class="btn-icon" id="themeToggle" title="Сменить тему">🌓</button>
+        <button class="btn-icon" id="themeToggle" title="Сменить тему">
+          <svg id="themeIcon" class="svg-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
       </div>
     </header>
 
-    <!-- Баннер текущей/ближайшей пары -->
-    <div class="live-banner" id="liveBanner">
+    <!-- Баннер текущей пары (показывается только во время занятия) -->
+    <div class="live-banner" id="liveBanner" style="display: none;">
       <div class="live-banner-info">
         <div class="live-badge">
           <span class="live-dot"></span>
           <span id="liveStatusText">Сейчас идёт</span>
         </div>
-        <div class="live-subject" id="liveSubjectText">Общий менеджмент</div>
+        <div class="live-subject" id="liveSubjectText"></div>
       </div>
-      <a href="#" target="_blank" rel="noopener noreferrer" class="btn-live-join" id="liveJoinBtn">Войти ➔</a>
+      <a href="#" target="_blank" rel="noopener noreferrer" class="btn-live-join" id="liveJoinBtn">
+        <svg class="svg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
+        <span>В вебинар ➔</span>
+      </a>
     </div>
 
     <!-- Секция Расписания -->
     <div id="scheduleSection">
-      <!-- Навигатор по датам (как в референсе) -->
+      <!-- Навигатор по датам -->
       <div class="date-navigator">
         <div class="date-nav-bar">
           <button class="nav-arrow-btn" id="prevDayBtn" title="Предыдущий день">
@@ -1016,7 +1119,9 @@
           </button>
 
           <button class="nav-center-btn" id="dateModalTrigger" title="Выбрать дату в календаре">
-            <span class="nav-cal-icon">📅</span>
+            <span class="nav-cal-icon">
+              <svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            </span>
             <span class="nav-date-text" id="navDateText">20 октября 2026 г.</span>
             <span class="nav-chevron">›</span>
           </button>
@@ -1034,6 +1139,22 @@
         </div>
       </div>
 
+      <!-- Карточка ближайшей пары / обратного отсчета -->
+      <div class="countdown-card" id="nextLessonCard" style="display: none;">
+        <div class="countdown-info">
+          <div class="countdown-badge">
+            <svg class="svg-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Ближайшая пара</span>
+          </div>
+          <div class="countdown-subject" id="nextLessonSubject">—</div>
+          <div class="countdown-meta" id="nextLessonMeta">—</div>
+        </div>
+        <div class="countdown-right">
+          <div class="countdown-pill" id="nextLessonTimer">—</div>
+          <button type="button" class="countdown-goto-btn" id="nextLessonGotoBtn">К дате ➔</button>
+        </div>
+      </div>
+
       <!-- Список занятий -->
       <div class="lessons-container" id="lessonsContainer"></div>
     </div>
@@ -1045,7 +1166,7 @@
         
         <div class="note-time-bar">
           <div class="time-inp-pill">
-            <span>⏰</span>
+            <svg class="svg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             <input type="datetime-local" class="note-datetime-inp" id="noteDatetimeInp" title="Выбрать время напоминания" />
           </div>
           <div class="quick-pill-row">
@@ -1068,11 +1189,11 @@
   <!-- Плавающее нижнее меню переключения вкладок -->
   <div class="bottom-dock">
     <button class="dock-tab active" id="tabSchedule">
-      <span>📅</span>
+      <svg class="svg-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
       <span>Расписание</span>
     </button>
     <button class="dock-tab" id="tabNotes">
-      <span>📝</span>
+      <svg class="svg-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
       <span>Заметки</span>
     </button>
   </div>
@@ -1251,14 +1372,26 @@
     }
 
     // Тема (светлая/тёмная)
+    function updateThemeIcon(theme) {
+      const icon = document.getElementById("themeIcon");
+      if (!icon) return;
+      if (theme === "dark") {
+        icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+      } else {
+        icon.innerHTML = `<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`;
+      }
+    }
+
     const savedTheme = localStorage.getItem("ranepa_theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     document.documentElement.setAttribute("data-theme", savedTheme);
+    updateThemeIcon(savedTheme);
 
     document.getElementById("themeToggle").addEventListener("click", () => {
       const current = document.documentElement.getAttribute("data-theme");
       const next = current === "dark" ? "light" : "dark";
       document.documentElement.setAttribute("data-theme", next);
       localStorage.setItem("ranepa_theme", next);
+      updateThemeIcon(next);
     });
 
     function showToast(text) {
@@ -1268,12 +1401,13 @@
       setTimeout(() => toast.classList.remove("show"), 2600);
     }
 
-    // Проверка текущей / ближайшей пары в реальном времени
+    // Проверка текущей пары в реальном времени (МТС Линк)
     function updateLiveBanner() {
       const banner = document.getElementById("liveBanner");
       const todayKey = formatDateKey(new Date());
       const dayData = SCHEDULE[todayKey];
       if (!dayData || !dayData.lessons) {
+        banner.style.display = "none";
         banner.classList.remove("active");
         return;
       }
@@ -1290,27 +1424,106 @@
 
         // Идет прямо сейчас
         if (nowMinutes >= startMin && nowMinutes <= endMin) {
+          banner.style.display = "flex";
           banner.classList.add("active");
           document.getElementById("liveStatusText").textContent = "Идёт прямо сейчас";
           document.getElementById("liveSubjectText").textContent = `${lesson.subject} (${lesson.time})`;
           const btn = document.getElementById("liveJoinBtn");
           btn.href = lesson.link || "#";
-          btn.textContent = "Войти ➔";
+          btn.innerHTML = `
+            <svg class="svg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
+            <span>В вебинар ➔</span>
+          `;
           return;
         }
 
         // Начнется меньше чем через 30 минут
         if (startMin > nowMinutes && startMin - nowMinutes <= 30) {
+          banner.style.display = "flex";
           banner.classList.add("active");
           document.getElementById("liveStatusText").textContent = `Начнётся через ${startMin - nowMinutes} мин`;
           document.getElementById("liveSubjectText").textContent = `${lesson.subject} (в ${startStr})`;
           const btn = document.getElementById("liveJoinBtn");
           btn.href = lesson.link || "#";
-          btn.textContent = "Готовиться ➔";
+          btn.innerHTML = `
+            <svg class="svg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
+            <span>В вебинар ➔</span>
+          `;
           return;
         }
       }
+      banner.style.display = "none";
       banner.classList.remove("active");
+    }
+
+    // Расчет ближайшей будущей пары и обратного отсчета
+    function updateNextLessonCountdown() {
+      const card = document.getElementById("nextLessonCard");
+      if (!card) return;
+
+      const now = new Date();
+      let nextLesson = null;
+      let nextDateKey = null;
+
+      for (const dKey of availableDates) {
+        const [y, m, d] = dKey.split("-").map(Number);
+        const dayInfo = SCHEDULE[dKey];
+        if (!dayInfo || !dayInfo.lessons) continue;
+
+        for (const lesson of dayInfo.lessons) {
+          const [sh, sm] = lesson.time.split(" - ")[0].split(":").map(Number);
+          const [eh, em] = lesson.time.split(" - ")[1].split(":").map(Number);
+          const lessonEndDate = new Date(y, m - 1, d, eh, em, 0);
+
+          if (lessonEndDate > now) {
+            nextLesson = lesson;
+            nextDateKey = dKey;
+            break;
+          }
+        }
+        if (nextLesson) break;
+      }
+
+      if (!nextLesson) {
+        card.style.display = "none";
+        return;
+      }
+
+      card.style.display = "flex";
+      const [y, m, d] = nextDateKey.split("-").map(Number);
+      const [sh, sm] = nextLesson.time.split(" - ")[0].split(":").map(Number);
+      const lessonStartDate = new Date(y, m - 1, d, sh, sm, 0);
+
+      const diffMs = lessonStartDate - now;
+      let timerStr = "";
+
+      if (diffMs <= 0) {
+        timerStr = "Идёт сейчас";
+      } else {
+        const diffMin = Math.floor(diffMs / 60000);
+        const days = Math.floor(diffMin / (60 * 24));
+        const hours = Math.floor((diffMin % (60 * 24)) / 60);
+        const mins = diffMin % 60;
+
+        if (days > 0) {
+          timerStr = `через ${days} дн. ${hours} ч.`;
+        } else if (hours > 0) {
+          timerStr = `через ${hours} ч. ${mins} мин.`;
+        } else {
+          timerStr = `через ${mins} мин.`;
+        }
+      }
+
+      document.getElementById("nextLessonSubject").textContent = nextLesson.subject;
+      document.getElementById("nextLessonMeta").textContent = `${d} ${MONTH_NAMES[m - 1]} (${SCHEDULE[nextDateKey].day_name}) в ${nextLesson.time.split(" - ")[0]}`;
+      document.getElementById("nextLessonTimer").textContent = timerStr;
+
+      const gotoBtn = document.getElementById("nextLessonGotoBtn");
+      gotoBtn.onclick = () => {
+        selectedDateKey = nextDateKey;
+        currentDate = new Date(y, m - 1, d);
+        renderDay(selectedDateKey);
+      };
     }
 
     // Отрисовка расписания выбранного дня
@@ -1337,11 +1550,15 @@
       if (!dayInfo || !dayInfo.lessons || dayInfo.lessons.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
-            <div class="empty-icon">🎉</div>
+            <div class="empty-icon">
+              <svg class="svg-ico" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
             <div class="empty-title">В этот день пар нет!</div>
-            <div class="empty-desc">Отличный день для отдыха, прогулок или личных дел.</div>
+            <div class="empty-desc">Отличный день для отдыха, домашних заданий или личных дел.</div>
           </div>
         `;
+        updateLiveBanner();
+        updateNextLessonCountdown();
         return;
       }
 
@@ -1351,19 +1568,26 @@
 
         card.innerHTML = `
           <div class="lesson-header">
-            <span class="lesson-time">⏰ ${l.time}</span>
+            <span class="lesson-time">
+              <svg class="svg-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>${l.time}</span>
+            </span>
             <span class="lesson-type">${l.type || "Занятие"}</span>
           </div>
           <div class="lesson-title">${l.subject}</div>
-          <div class="lesson-teacher">👤 ${l.teacher || "Преподаватель не указан"}</div>
+          <div class="lesson-teacher">
+            <svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>${l.teacher || "Преподаватель не указан"}</span>
+          </div>
           ${l.link ? `<a href="${l.link}" target="_blank" rel="noopener noreferrer" class="btn-mts">
-            <span>📹</span>
+            <svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
             <span>Подключиться к занятию (МТС Линк)</span>
           </a>` : ""}
         `;
         container.appendChild(card);
       });
       updateLiveBanner();
+      updateNextLessonCountdown();
     }
 
     // Переключение дней стрелочками
@@ -1612,6 +1836,7 @@
 
     setInterval(checkUpcomingLessonPush, 30000);
     setInterval(updateLiveBanner, 30000);
+    setInterval(updateNextLessonCountdown, 30000);
 
     // ==========================================
     // ГЕНЕРАТОР КАЛЕНДАРЯ (.ICS) НА ТЕЛЕФОН
@@ -1836,7 +2061,9 @@
       if (notes.length === 0) {
         container.innerHTML = `
           <div class="empty-state">
-            <div class="empty-icon">📝</div>
+            <div class="empty-icon">
+              <svg class="svg-ico" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
             <div class="empty-title">Заметок пока нет</div>
             <div class="empty-desc">Запиши домашку, темы семинаров или важные задачи. Всё сохранится прямо в телефоне!</div>
           </div>
@@ -1850,12 +2077,15 @@
         
         let timeBadgeHtml = "";
         if (n.remindAt) {
-          const badgeText = n.reminded ? "✓ Напомнено" : `🔔 ${formatRemindBadge(n.remindAt)}`;
+          const badgeText = n.reminded ? "✓ Напомнено" : `<svg class="svg-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> ${formatRemindBadge(n.remindAt)}`;
           const badgeClass = n.reminded ? "note-time-badge fired" : "note-time-badge";
           timeBadgeHtml = `
             <div style="display:flex; align-items:center; flex-wrap:wrap;">
               <div class="${badgeClass}">${badgeText}</div>
-              <button type="button" class="btn-note-cal" title="Добавить напоминание в календарь телефона">📲 В календарь</button>
+              <button type="button" class="btn-note-cal" title="Добавить напоминание в календарь телефона">
+                <svg class="svg-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                <span>В календарь</span>
+              </button>
             </div>
           `;
         }
