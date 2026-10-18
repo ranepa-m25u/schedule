@@ -112,6 +112,12 @@
       font-weight: 500;
     }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .btn-icon {
       width: 40px;
       height: 40px;
@@ -124,11 +130,89 @@
       cursor: pointer;
       font-size: 18px;
       box-shadow: var(--shadow);
+      position: relative;
       transition: transform 0.12s ease, background 0.2s;
     }
 
     .btn-icon:active {
       transform: scale(0.94);
+    }
+
+    /* Колокольчик уведомлений */
+    .notif-dot {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff3b30;
+      box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.25);
+      animation: notif-pulse 1.6s infinite;
+    }
+
+    @keyframes notif-pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    /* Баннер текущей пары */
+    .live-banner {
+      display: none;
+      background: linear-gradient(135deg, rgba(229, 57, 53, 0.12), rgba(255, 123, 123, 0.08));
+      border: 1px solid rgba(229, 57, 53, 0.25);
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .live-banner.active {
+      display: flex;
+    }
+
+    .live-banner-info {
+      flex: 1;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: notif-pulse 1.2s infinite;
+    }
+
+    .live-subject {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--fg);
+    }
+
+    .btn-live-join {
+      padding: 6px 14px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 10px rgba(229, 57, 53, 0.3);
     }
 
     /* Навигация по датам */
@@ -256,19 +340,6 @@
       padding: 3px 8px;
       border-radius: 99px;
       margin-bottom: 8px;
-    }
-
-    .pulse-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--accent);
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(1.3); }
     }
 
     .lesson-header {
@@ -518,7 +589,7 @@
       box-shadow: 0 4px 14px rgba(229, 57, 53, 0.35);
     }
 
-    /* Модальное окно календаря */
+    /* Модальные окна */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -541,23 +612,24 @@
       border: 1px solid var(--line);
       border-radius: 22px;
       width: 100%;
-      max-width: 360px;
-      padding: 20px;
+      max-width: 380px;
+      padding: 22px;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
     }
 
-    .cal-header {
+    .modal-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 16px;
     }
 
-    .cal-title {
+    .modal-head-title {
       font-weight: 800;
-      font-size: 17px;
+      font-size: 18px;
     }
 
+    /* Календарная сетка */
     .cal-weekdays {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -617,9 +689,139 @@
     .cal-day.empty {
       pointer-events: none;
     }
+
+    /* Стили модалки уведомлений */
+    .notif-block {
+      background: var(--chip-bg);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .notif-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .notif-block-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .notif-block-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    /* Ползунок (iOS Switch) */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: var(--line);
+      transition: 0.25s ease;
+      border-radius: 28px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.25s ease;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    .btn-modal-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 14px;
+      border: 0;
+      background: var(--fg);
+      color: var(--bg);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: var(--shadow);
+      transition: transform 0.12s ease;
+    }
+
+    .btn-modal-action:active {
+      transform: scale(0.97);
+    }
+
+    .btn-cal-export {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+
+    .toast-msg {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-30px);
+      background: var(--card-bg);
+      color: var(--fg);
+      padding: 10px 18px;
+      border-radius: 99px;
+      border: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      z-index: 999;
+    }
+
+    .toast-msg.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Всплывающий тост -->
+  <div class="toast-msg" id="toastMsg">Уведомление</div>
 
   <div class="container">
     <!-- Шапка -->
@@ -631,8 +833,26 @@
           <div class="brand-subtitle">Учебное расписание</div>
         </div>
       </div>
-      <button class="btn-icon" id="themeToggle" title="Сменить тему">🌓</button>
+      <div class="header-actions">
+        <button class="btn-icon" id="notifBtn" title="Напоминания и уведомления">
+          <span>🔔</span>
+          <span class="notif-dot" id="notifDot"></span>
+        </button>
+        <button class="btn-icon" id="themeToggle" title="Сменить тему">🌓</button>
+      </div>
     </header>
+
+    <!-- Баннер текущей/ближайшей пары -->
+    <div class="live-banner" id="liveBanner">
+      <div class="live-banner-info">
+        <div class="live-badge">
+          <span class="live-dot"></span>
+          <span id="liveStatusText">Сейчас идёт</span>
+        </div>
+        <div class="live-subject" id="liveSubjectText">Общий менеджмент</div>
+      </div>
+      <a href="#" target="_blank" rel="noopener noreferrer" class="btn-live-join" id="liveJoinBtn">Войти ➔</a>
+    </div>
 
     <!-- Секция Расписания -->
     <div id="scheduleSection">
@@ -641,7 +861,7 @@
         <div class="date-row">
           <button class="date-btn" id="prevDayBtn">‹</button>
           <div class="date-display" id="dateModalTrigger" title="Открыть календарь">
-            <div class="date-dayname" id="dayNameDisplay">Понедельник</div>
+            <div class="date-dayname" id="dayNameDisplay">Вторник</div>
             <div class="date-formatted" id="dateFormattedDisplay">20 октября 2026 ▾</div>
           </div>
           <button class="date-btn" id="nextDayBtn">›</button>
@@ -683,14 +903,56 @@
   <!-- Модальное окно календаря -->
   <div class="modal-overlay" id="calendarModal">
     <div class="modal-card">
-      <div class="cal-header">
-        <div class="cal-title" id="calMonthTitle">Октябрь 2026</div>
+      <div class="modal-head">
+        <div class="modal-head-title" id="calMonthTitle">Октябрь 2026</div>
         <button class="btn-icon" id="closeCalModal" style="width:32px;height:32px;font-size:14px;">✕</button>
       </div>
       <div class="cal-weekdays">
         <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
       </div>
       <div class="cal-grid" id="calGrid"></div>
+    </div>
+  </div>
+
+  <!-- Модальное окно уведомлений и календаря -->
+  <div class="modal-overlay" id="notifModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-head-title">🔔 Напоминания</div>
+        <button class="btn-icon" id="closeNotifModal" style="width:32px;height:32px;font-size:14px;">✕</button>
+      </div>
+
+      <!-- Настройка Пуш-уведомлений -->
+      <div class="notif-block">
+        <div class="notif-block-header">
+          <div>
+            <div class="notif-block-title">Пуш за 15 минут до пары</div>
+            <div class="notif-block-desc" id="pushStatusDesc">Уведомление на экран перед началом занятия</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="pushSwitch" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Добавление в календарь телефона -->
+      <div class="notif-block">
+        <div class="notif-block-title">📅 Календарь телефона (.ics)</div>
+        <div class="notif-block-desc" style="margin-bottom: 8px;">
+          Добавь все пары сразу в системный календарь (iPhone / Android) со встроенными напоминаниями и ссылками.
+        </div>
+        <button class="btn-modal-action btn-cal-export" id="exportIcsBtn">
+          <span>📲</span>
+          <span>Добавить в календарь телефона</span>
+        </button>
+      </div>
+
+      <!-- Бот в Телеграме -->
+      <a href="https://t.me/raspisanieranx_bot" target="_blank" rel="noopener noreferrer" class="btn-modal-action" style="background: #229ed9; color:#fff;">
+        <span>🤖</span>
+        <span>Открыть бота в Telegram</span>
+      </a>
     </div>
   </div>
 
@@ -799,7 +1061,6 @@
     const DAY_NAMES = ["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"];
 
     let currentDate = new Date();
-    // Если текущая дата не в октябре 2026, установим ближайший день из расписания для наглядности
     const availableDates = Object.keys(SCHEDULE).sort();
 
     function formatDateKey(d) {
@@ -809,10 +1070,8 @@
       return `${year}-${month}-${day}`;
     }
 
-    // Инициализируем на сегодняшний день, либо на ближайший учебный день
     let selectedDateKey = formatDateKey(currentDate);
     if (!SCHEDULE[selectedDateKey] && availableDates.length > 0) {
-      // Ищем ближайшую будущую дату с парами
       const nextDate = availableDates.find(d => d >= selectedDateKey);
       if (nextDate) {
         selectedDateKey = nextDate;
@@ -830,6 +1089,58 @@
       document.documentElement.setAttribute("data-theme", next);
       localStorage.setItem("ranepa_theme", next);
     });
+
+    function showToast(text) {
+      const toast = document.getElementById("toastMsg");
+      toast.textContent = text;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    // Проверка текущей / ближайшей пары в реальном времени
+    function updateLiveBanner() {
+      const banner = document.getElementById("liveBanner");
+      const todayKey = formatDateKey(new Date());
+      const dayData = SCHEDULE[todayKey];
+      if (!dayData || !dayData.lessons) {
+        banner.classList.remove("active");
+        return;
+      }
+
+      const now = new Date();
+      const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+      for (const lesson of dayData.lessons) {
+        const [startStr, endStr] = lesson.time.split(" - ");
+        const [sh, sm] = startStr.split(":").map(Number);
+        const [eh, em] = endStr.split(":").map(Number);
+        const startMin = sh * 60 + sm;
+        const endMin = eh * 60 + em;
+
+        // Идет прямо сейчас
+        if (nowMinutes >= startMin && nowMinutes <= endMin) {
+          banner.classList.add("active");
+          document.getElementById("liveStatusText").textContent = "Идёт прямо сейчас";
+          document.getElementById("liveSubjectText").textContent = `${lesson.subject} (${lesson.time})`;
+          const btn = document.getElementById("liveJoinBtn");
+          btn.href = lesson.link || "#";
+          btn.textContent = "Войти ➔";
+          return;
+        }
+
+        // Начнется меньше чем через 30 минут
+        if (startMin > nowMinutes && startMin - nowMinutes <= 30) {
+          banner.classList.add("active");
+          document.getElementById("liveStatusText").textContent = `Начнётся через ${startMin - nowMinutes} мин`;
+          document.getElementById("liveSubjectText").textContent = `${lesson.subject} (в ${startStr})`;
+          const btn = document.getElementById("liveJoinBtn");
+          btn.href = lesson.link || "#";
+          btn.textContent = "Готовиться ➔";
+          return;
+        }
+      }
+      banner.classList.remove("active");
+    }
 
     // Отрисовка расписания выбранного дня
     function renderDay(dateKey) {
@@ -854,7 +1165,7 @@
         return;
       }
 
-      dayInfo.lessons.forEach((l, index) => {
+      dayInfo.lessons.forEach((l) => {
         const card = document.createElement("div");
         card.className = "lesson-card";
 
@@ -872,6 +1183,7 @@
         `;
         container.appendChild(card);
       });
+      updateLiveBanner();
     }
 
     // Переключение дней стрелочками
@@ -977,7 +1289,7 @@
       grid.innerHTML = "";
 
       const firstDay = new Date(year, month, 1).getDay();
-      const offset = (firstDay + 6) % 7; // Понедельник = 0
+      const offset = (firstDay + 6) % 7;
       const daysInMonth = new Date(year, month + 1, 0).getDate();
 
       for (let i = 0; i < offset; i++) {
@@ -1011,7 +1323,180 @@
       }
     }
 
-    // Вкладки Расписание / Заметки
+    // ==========================================
+    // СИСТЕМА УВЕДОМЛЕНИЙ И КАЛЕНДАРЯ ТЕЛЕФОНА
+    // ==========================================
+    const notifModal = document.getElementById("notifModal");
+    const notifBtn = document.getElementById("notifBtn");
+    const closeNotifModal = document.getElementById("closeNotifModal");
+    const pushSwitch = document.getElementById("pushSwitch");
+    const pushStatusDesc = document.getElementById("pushStatusDesc");
+
+    notifBtn.addEventListener("click", () => {
+      notifModal.classList.add("open");
+      updatePushUI();
+    });
+
+    closeNotifModal.addEventListener("click", () => notifModal.classList.remove("open"));
+    notifModal.addEventListener("click", (e) => {
+      if (e.target === notifModal) notifModal.classList.remove("open");
+    });
+
+    function updatePushUI() {
+      if (!("Notification" in window)) {
+        pushStatusDesc.textContent = "Не поддерживается браузером";
+        pushSwitch.disabled = true;
+        return;
+      }
+      if (Notification.permission === "granted") {
+        const enabled = localStorage.getItem("ranepa_push_enabled") === "true";
+        pushSwitch.checked = enabled;
+        pushStatusDesc.textContent = enabled ? "Включено: напоминаем за 15 мин" : "Выключено пользователем";
+      } else if (Notification.permission === "denied") {
+        pushSwitch.checked = false;
+        pushStatusDesc.textContent = "Заблокировано в настройках браузера";
+      } else {
+        pushSwitch.checked = false;
+        pushStatusDesc.textContent = "Нажмите переключатель для включения";
+      }
+    }
+
+    pushSwitch.addEventListener("change", async () => {
+      if (pushSwitch.checked) {
+        if (!("Notification" in window)) {
+          showToast("Ваш браузер не поддерживает пуши");
+          pushSwitch.checked = false;
+          return;
+        }
+
+        const perm = await Notification.requestPermission();
+        if (perm === "granted") {
+          localStorage.setItem("ranepa_push_enabled", "true");
+          showToast("🔔 Уведомления успешно включены!");
+          new Notification("🔔 Напоминания включены!", {
+            body: "Вы получите уведомление за 15 минут до начала пары.",
+            icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>"
+          });
+        } else {
+          showToast("Разрешение на уведомления отклонено");
+          pushSwitch.checked = false;
+          localStorage.setItem("ranepa_push_enabled", "false");
+        }
+      } else {
+        localStorage.setItem("ranepa_push_enabled", "false");
+        showToast("Уведомления выключены");
+      }
+      updatePushUI();
+    });
+
+    // Периодическая проверка (каждые 30 секунд): отправка пуша за 15 минут до пары
+    const notifiedLessons = new Set(JSON.parse(sessionStorage.getItem("notified_lessons") || "[]"));
+
+    function checkUpcomingLessonPush() {
+      if (localStorage.getItem("ranepa_push_enabled") !== "true") return;
+      if (!("Notification" in window) || Notification.permission !== "granted") return;
+
+      const todayKey = formatDateKey(new Date());
+      const dayData = SCHEDULE[todayKey];
+      if (!dayData || !dayData.lessons) return;
+
+      const now = new Date();
+      const nowMin = now.getHours() * 60 + now.getMinutes();
+
+      dayData.lessons.forEach(l => {
+        const [startStr] = l.time.split(" - ");
+        const [sh, sm] = startStr.split(":").map(Number);
+        const startMin = sh * 60 + sm;
+        const diff = startMin - nowMin;
+
+        // Если до начала осталось ровно 15 или меньше минут, и еще не оповещали
+        const lessonId = `${todayKey}_${l.time}_${l.subject}`;
+        if (diff > 0 && diff <= 15 && !notifiedLessons.has(lessonId)) {
+          notifiedLessons.add(lessonId);
+          sessionStorage.setItem("notified_lessons", JSON.stringify(Array.from(notifiedLessons)));
+
+          const notif = new Notification(`🔔 Скоро пара через ${diff} мин!`, {
+            body: `📖 ${l.subject}\n⏰ Начало в ${startStr}. Нажмите для входа в МТС Линк!`,
+            icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>"
+          });
+
+          if (l.link) {
+            notif.onclick = () => {
+              window.open(l.link, "_blank");
+            };
+          }
+        }
+      });
+    }
+
+    setInterval(checkUpcomingLessonPush, 30000);
+    setInterval(updateLiveBanner, 30000);
+
+    // ==========================================
+    // ГЕНЕРАТОР КАЛЕНДАРЯ (.ICS) НА ТЕЛЕФОН
+    // ==========================================
+    document.getElementById("exportIcsBtn").addEventListener("click", () => {
+      const icsLines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//RANEPA//Schedule M25U//RU",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH",
+        "X-WR-CALNAME:Расписание М25-У",
+        "X-WR-TIMEZONE:Europe/Moscow"
+      ];
+
+      for (const [dateStr, info] of Object.entries(SCHEDULE)) {
+        const [y, m, d] = dateStr.split("-").map(Number);
+        for (const l of info.lessons) {
+          const [startStr, endStr] = l.time.split(" - ");
+          const [sh, sm] = startStr.split(":").map(Number);
+          const [eh, em] = endStr.split(":").map(Number);
+
+          const dtStart = `${y}${String(m).padStart(2,'0')}${String(d).padStart(2,'0')}T${String(sh).padStart(2,'0')}${String(sm).padStart(2,'0')}00`;
+          const dtEnd = `${y}${String(m).padStart(2,'0')}${String(d).padStart(2,'0')}T${String(eh).padStart(2,'0')}${String(em).padStart(2,'0')}00`;
+
+          icsLines.push("BEGIN:VEVENT");
+          icsLines.push(`UID:ranepa-m25u-${dateStr}-${startStr.replace(':','')}@ranepa.ru`);
+          icsLines.push(`DTSTAMP:${dtStart}Z`);
+          icsLines.push(`DTSTART;TZID=Europe/Moscow:${dtStart}`);
+          icsLines.push(`DTEND;TZID=Europe/Moscow:${dtEnd}`);
+          icsLines.push(`SUMMARY:${l.subject}`);
+          icsLines.push(`DESCRIPTION:Преподаватель: ${l.teacher || ""}\\nФормат: ${l.type || ""}\\nМТС Линк: ${l.link || ""}`);
+          if (l.link) {
+            icsLines.push(`LOCATION:${l.link}`);
+            icsLines.push(`URL:${l.link}`);
+          }
+          // Системный будильник за 15 минут до пары
+          icsLines.push("BEGIN:VALARM");
+          icsLines.push("ACTION:DISPLAY");
+          icsLines.push(`DESCRIPTION:Скоро пара: ${l.subject}`);
+          icsLines.push("TRIGGER:-PT15M");
+          icsLines.push("END:VALARM");
+
+          icsLines.push("END:VEVENT");
+        }
+      }
+
+      icsLines.push("END:VCALENDAR");
+      const icsData = icsLines.join("\r\n");
+
+      const blob = new Blob([icsData], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "ranepa_m25u_schedule.ics");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      showToast("📅 Файл расписания скачан! Откройте его на телефоне");
+    });
+
+    // ==========================================
+    // ВКЛАДКИ РАСПИСАНИЕ / ЗАМЕТКИ
+    // ==========================================
     const tabSchedule = document.getElementById("tabSchedule");
     const tabNotes = document.getElementById("tabNotes");
     const scheduleSection = document.getElementById("scheduleSection");
@@ -1113,6 +1598,7 @@
 
     // Первоначальный запуск
     renderDay(selectedDateKey);
+    updatePushUI();
   </script>
 </body>
 </html>
