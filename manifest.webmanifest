@@ -1,0 +1,17 @@
+{
+  "name": "РАНХиГС М25-У Расписание",
+  "short_name": "М25-У Учёба",
+  "description": "Расписание занятий и заметки группы М25-У",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#e53935",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e53935'/><text x='50%' y='55%' font-size='60' text-anchor='middle' dominant-baseline='middle'>🎓</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

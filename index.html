@@ -1,0 +1,1118 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>РАНХиГС М25-У • Расписание</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="М25-У Учёба" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#12161f" media="(prefers-color-scheme: dark)" />
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e53935'/><text x='50%' y='55%' font-size='60' text-anchor='middle' dominant-baseline='middle'>🎓</text></svg>" />
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --fg: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --accent: #e53935;
+      --accent-soft: rgba(229, 57, 53, 0.1);
+      --accent-hover: #d32f2f;
+      --mts-color: #e30611;
+      --success: #10b981;
+      --chip-bg: #f1f5f9;
+      --chip-fg: #334155;
+      --shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+      --shadow-hover: 0 10px 25px -3px rgba(15, 23, 42, 0.1);
+      --radius: 18px;
+      --safe-bottom: env(safe-area-inset-bottom, 16px);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b0f17;
+      --card-bg: #141a26;
+      --fg: #f1f5f9;
+      --muted: #94a3b8;
+      --line: #222b3c;
+      --accent: #ff5252;
+      --accent-soft: rgba(255, 82, 82, 0.15);
+      --accent-hover: #ff7b7b;
+      --chip-bg: #1c2434;
+      --chip-fg: #cbd5e1;
+      --shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.4);
+      --shadow-hover: 0 10px 30px -3px rgba(0, 0, 0, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      padding-bottom: calc(80px + var(--safe-bottom));
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Верхняя панель */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0 18px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #e53935, #ff7b7b);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      box-shadow: 0 6px 16px rgba(229, 57, 53, 0.35);
+    }
+
+    .brand-title {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--card-bg);
+      color: var(--fg);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 18px;
+      box-shadow: var(--shadow);
+      transition: transform 0.12s ease, background 0.2s;
+    }
+
+    .btn-icon:active {
+      transform: scale(0.94);
+    }
+
+    /* Навигация по датам */
+    .date-navigator {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .date-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .date-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      border: 1px solid var(--line);
+      background: var(--chip-bg);
+      color: var(--fg);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.15s ease;
+    }
+
+    .date-btn:active {
+      transform: scale(0.92);
+    }
+
+    .date-display {
+      text-align: center;
+      cursor: pointer;
+      flex: 1;
+      padding: 4px 8px;
+      border-radius: 12px;
+      transition: background 0.15s;
+    }
+
+    .date-display:active {
+      background: var(--chip-bg);
+    }
+
+    .date-dayname {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .date-formatted {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Быстрые фильтры */
+    .quick-chips {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .chip {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: var(--chip-bg);
+      color: var(--chip-fg);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+
+    .chip.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+    }
+
+    /* Список занятий */
+    .lessons-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .lesson-card {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .lesson-card.is-now {
+      border: 2px solid var(--accent);
+      box-shadow: 0 8px 26px var(--accent-soft);
+    }
+
+    .now-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 3px 8px;
+      border-radius: 99px;
+      margin-bottom: 8px;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.3); }
+    }
+
+    .lesson-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .lesson-time {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 4px 10px;
+      border-radius: 8px;
+      letter-spacing: -0.2px;
+    }
+
+    .lesson-type {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .lesson-title {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+      color: var(--fg);
+    }
+
+    .lesson-teacher {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 14px;
+    }
+
+    .btn-mts {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 11px 16px;
+      border-radius: 12px;
+      border: 0;
+      background: linear-gradient(135deg, #e30611, #ff2a38);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(227, 6, 17, 0.28);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .btn-mts:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 8px rgba(227, 6, 17, 0.4);
+    }
+
+    /* Пустое состояние */
+    .empty-state {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 40px 20px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .empty-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .empty-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* Вкладка заметок */
+    .notes-section {
+      display: none;
+    }
+
+    .notes-section.active {
+      display: block;
+    }
+
+    .note-input-wrap {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .note-input {
+      flex: 1;
+      height: 46px;
+      padding: 0 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--card-bg);
+      color: var(--fg);
+      font-size: 15px;
+      outline: none;
+      box-shadow: var(--shadow);
+      transition: border-color 0.2s;
+    }
+
+    .note-input:focus {
+      border-color: var(--accent);
+    }
+
+    .btn-add {
+      height: 46px;
+      padding: 0 18px;
+      border-radius: 14px;
+      border: 0;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(229, 57, 53, 0.35);
+      transition: transform 0.12s ease;
+    }
+
+    .btn-add:active {
+      transform: scale(0.95);
+    }
+
+    .note-item {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .note-item.done .note-text {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+
+    .note-checkbox {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      border: 2px solid var(--line);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      color: #fff;
+      font-size: 12px;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .note-item.done .note-checkbox {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .note-text {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 500;
+      word-break: break-word;
+    }
+
+    .btn-del-note {
+      background: none;
+      border: 0;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px;
+      border-radius: 8px;
+      opacity: 0.6;
+      transition: opacity 0.15s;
+    }
+
+    .btn-del-note:hover {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    /* Нижняя панель навигации (Floating Dock) */
+    .bottom-dock {
+      position: fixed;
+      bottom: calc(14px + var(--safe-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 32px);
+      max-width: 380px;
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
+      padding: 6px;
+      display: flex;
+      gap: 6px;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .dock-tab {
+      flex: 1;
+      padding: 10px 0;
+      border-radius: 18px;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .dock-tab.active {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(229, 57, 53, 0.35);
+    }
+
+    /* Модальное окно календаря */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 200;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      width: 100%;
+      max-width: 360px;
+      padding: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .cal-title {
+      font-weight: 800;
+      font-size: 17px;
+    }
+
+    .cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      background: transparent;
+      border: 0;
+      color: var(--fg);
+    }
+
+    .cal-day:hover {
+      background: var(--chip-bg);
+    }
+
+    .cal-day.active {
+      background: var(--accent);
+      color: #fff !important;
+      font-weight: 800;
+    }
+
+    .cal-day.has-class::after {
+      content: "";
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #e53935;
+      position: absolute;
+      bottom: 3px;
+    }
+
+    .cal-day.active.has-class::after {
+      background: #ffffff;
+    }
+
+    .cal-day.empty {
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Шапка -->
+    <header>
+      <div class="brand-wrap">
+        <div class="logo-badge">🎓</div>
+        <div>
+          <div class="brand-title">РАНХиГС • М25-У</div>
+          <div class="brand-subtitle">Учебное расписание</div>
+        </div>
+      </div>
+      <button class="btn-icon" id="themeToggle" title="Сменить тему">🌓</button>
+    </header>
+
+    <!-- Секция Расписания -->
+    <div id="scheduleSection">
+      <!-- Навигатор по датам -->
+      <div class="date-navigator">
+        <div class="date-row">
+          <button class="date-btn" id="prevDayBtn">‹</button>
+          <div class="date-display" id="dateModalTrigger" title="Открыть календарь">
+            <div class="date-dayname" id="dayNameDisplay">Понедельник</div>
+            <div class="date-formatted" id="dateFormattedDisplay">20 октября 2026 ▾</div>
+          </div>
+          <button class="date-btn" id="nextDayBtn">›</button>
+        </div>
+
+        <div class="quick-chips">
+          <button class="chip active" id="chipToday">Сегодня</button>
+          <button class="chip" id="chipTomorrow">Завтра</button>
+          <button class="chip" id="chipAll">Все дни</button>
+        </div>
+      </div>
+
+      <!-- Список занятий -->
+      <div class="lessons-container" id="lessonsContainer"></div>
+    </div>
+
+    <!-- Секция Заметок -->
+    <div id="notesSection" class="notes-section">
+      <div class="note-input-wrap">
+        <input type="text" class="note-input" id="noteInput" placeholder="Новая заметка или задание..." />
+        <button class="btn-add" id="addNoteBtn">Добавить</button>
+      </div>
+      <div id="notesListContainer"></div>
+    </div>
+  </div>
+
+  <!-- Плавающее нижнее меню переключения вкладок -->
+  <div class="bottom-dock">
+    <button class="dock-tab active" id="tabSchedule">
+      <span>📅</span>
+      <span>Расписание</span>
+    </button>
+    <button class="dock-tab" id="tabNotes">
+      <span>📝</span>
+      <span>Заметки</span>
+    </button>
+  </div>
+
+  <!-- Модальное окно календаря -->
+  <div class="modal-overlay" id="calendarModal">
+    <div class="modal-card">
+      <div class="cal-header">
+        <div class="cal-title" id="calMonthTitle">Октябрь 2026</div>
+        <button class="btn-icon" id="closeCalModal" style="width:32px;height:32px;font-size:14px;">✕</button>
+      </div>
+      <div class="cal-weekdays">
+        <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+  </div>
+
+  <script>
+    // Встроенные данные расписания группы М25-У (РАНХиГС)
+    const SCHEDULE = {
+      "2026-10-20": {
+        "day_name": "Вторник",
+        "lessons": [
+          {
+            "time": "17:50 - 19:10",
+            "subject": "Общий менеджмент",
+            "type": "Практическое занятие",
+            "teacher": "Чаусова Людмила Александровна",
+            "link": "https://my.mts-link.ru/j/Ranepa/142463420"
+          }
+        ]
+      },
+      "2026-10-21": {
+        "day_name": "Среда",
+        "lessons": [
+          {
+            "time": "17:50 - 19:10",
+            "subject": "Иностранный язык (для имеющих навыки)",
+            "type": "Практическое занятие",
+            "teacher": "Зельникова Яна Игоревна",
+            "link": "https://ranepa.mts-link.ru/j/Ranepa/148785347"
+          }
+        ]
+      },
+      "2026-10-22": {
+        "day_name": "Четверг",
+        "lessons": [
+          {
+            "time": "17:50 - 19:10",
+            "subject": "Общий менеджмент",
+            "type": "Практическое занятие",
+            "teacher": "Чаусова Людмила Александровна",
+            "link": "https://my.mts-link.ru/j/Ranepa/142463420"
+          }
+        ]
+      },
+      "2026-10-24": {
+        "day_name": "Суббота",
+        "lessons": [
+          {
+            "time": "08:30 - 09:50",
+            "subject": "Логистика внешнеторговых операций",
+            "type": "Практическое занятие",
+            "teacher": "Швырев Роман Валентинович",
+            "link": "https://my.mts-link.ru/event/1817301461/1036887935"
+          }
+        ]
+      },
+      "2026-10-27": {
+        "day_name": "Вторник",
+        "lessons": [
+          {
+            "time": "17:50 - 19:10",
+            "subject": "Экологический менеджмент",
+            "type": "Лекция / Практическое занятие",
+            "teacher": "Антохина Варвара Анатольевна",
+            "link": "https://ranepa.mts-link.ru/j/107725991/107487372/stream-new/823384798"
+          }
+        ]
+      },
+      "2026-10-28": {
+        "day_name": "Среда",
+        "lessons": [
+          {
+            "time": "17:50 - 19:10",
+            "subject": "Иностранный язык (для начинающих)",
+            "type": "Практическое занятие",
+            "teacher": "Зельникова Яна Игоревна",
+            "link": "https://ranepa.mts-link.ru/j/Ranepa/148785347"
+          }
+        ]
+      },
+      "2026-10-29": {
+        "day_name": "Четверг",
+        "lessons": [
+          {
+            "time": "17:50 - 19:10",
+            "subject": "Философия",
+            "type": "Практическое занятие",
+            "teacher": "Майорова Наталья Олеговна",
+            "link": "https://ranepa.mts-link.ru/j/Ranepa/2030069958"
+          }
+        ]
+      },
+      "2026-10-31": {
+        "day_name": "Суббота",
+        "lessons": [
+          {
+            "time": "08:30 - 09:50",
+            "subject": "Налоги и налогообложение",
+            "type": "Практическое занятие",
+            "teacher": "Солярик Марина Анатольевна",
+            "link": "https://ranepa.mts-link.ru/j/94657031/1764078116/stream-new/721207890"
+          }
+        ]
+      }
+    };
+
+    const MONTH_NAMES = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+    const DAY_NAMES = ["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"];
+
+    let currentDate = new Date();
+    // Если текущая дата не в октябре 2026, установим ближайший день из расписания для наглядности
+    const availableDates = Object.keys(SCHEDULE).sort();
+
+    function formatDateKey(d) {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    // Инициализируем на сегодняшний день, либо на ближайший учебный день
+    let selectedDateKey = formatDateKey(currentDate);
+    if (!SCHEDULE[selectedDateKey] && availableDates.length > 0) {
+      // Ищем ближайшую будущую дату с парами
+      const nextDate = availableDates.find(d => d >= selectedDateKey);
+      if (nextDate) {
+        selectedDateKey = nextDate;
+        currentDate = new Date(nextDate);
+      }
+    }
+
+    // Тема (светлая/тёмная)
+    const savedTheme = localStorage.getItem("ranepa_theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", savedTheme);
+
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      const current = document.documentElement.getAttribute("data-theme");
+      const next = current === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("ranepa_theme", next);
+    });
+
+    // Отрисовка расписания выбранного дня
+    function renderDay(dateKey) {
+      const parts = dateKey.split("-");
+      const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      
+      document.getElementById("dayNameDisplay").textContent = DAY_NAMES[d.getDay()];
+      document.getElementById("dateFormattedDisplay").textContent = `${d.getDate()} ${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()} ▾`;
+
+      const container = document.getElementById("lessonsContainer");
+      container.innerHTML = "";
+
+      const dayInfo = SCHEDULE[dateKey];
+      if (!dayInfo || !dayInfo.lessons || dayInfo.lessons.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🎉</div>
+            <div class="empty-title">В этот день пар нет!</div>
+            <div class="empty-desc">Отличный день для отдыха, прогулок или личных дел.</div>
+          </div>
+        `;
+        return;
+      }
+
+      dayInfo.lessons.forEach((l, index) => {
+        const card = document.createElement("div");
+        card.className = "lesson-card";
+
+        card.innerHTML = `
+          <div class="lesson-header">
+            <span class="lesson-time">⏰ ${l.time}</span>
+            <span class="lesson-type">${l.type || "Занятие"}</span>
+          </div>
+          <div class="lesson-title">${l.subject}</div>
+          <div class="lesson-teacher">👤 ${l.teacher || "Преподаватель не указан"}</div>
+          ${l.link ? `<a href="${l.link}" target="_blank" rel="noopener noreferrer" class="btn-mts">
+            <span>📹</span>
+            <span>Подключиться к занятию (МТС Линк)</span>
+          </a>` : ""}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Переключение дней стрелочками
+    document.getElementById("prevDayBtn").addEventListener("click", () => {
+      currentDate.setDate(currentDate.getDate() - 1);
+      selectedDateKey = formatDateKey(currentDate);
+      resetActiveChips();
+      renderDay(selectedDateKey);
+    });
+
+    document.getElementById("nextDayBtn").addEventListener("click", () => {
+      currentDate.setDate(currentDate.getDate() + 1);
+      selectedDateKey = formatDateKey(currentDate);
+      resetActiveChips();
+      renderDay(selectedDateKey);
+    });
+
+    function resetActiveChips() {
+      document.querySelectorAll(".quick-chips .chip").forEach(c => c.classList.remove("active"));
+    }
+
+    // Кнопки быстрых фильтров
+    document.getElementById("chipToday").addEventListener("click", (e) => {
+      resetActiveChips();
+      e.target.classList.add("active");
+      currentDate = new Date();
+      selectedDateKey = formatDateKey(currentDate);
+      renderDay(selectedDateKey);
+    });
+
+    document.getElementById("chipTomorrow").addEventListener("click", (e) => {
+      resetActiveChips();
+      e.target.classList.add("active");
+      currentDate = new Date();
+      currentDate.setDate(currentDate.getDate() + 1);
+      selectedDateKey = formatDateKey(currentDate);
+      renderDay(selectedDateKey);
+    });
+
+    document.getElementById("chipAll").addEventListener("click", (e) => {
+      resetActiveChips();
+      e.target.classList.add("active");
+      renderAllSchedule();
+    });
+
+    function renderAllSchedule() {
+      document.getElementById("dayNameDisplay").textContent = "Все занятия";
+      document.getElementById("dateFormattedDisplay").textContent = "Полный список на месяц";
+      const container = document.getElementById("lessonsContainer");
+      container.innerHTML = "";
+
+      availableDates.forEach(dateKey => {
+        const parts = dateKey.split("-");
+        const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+        const dayInfo = SCHEDULE[dateKey];
+
+        const dayDivider = document.createElement("div");
+        dayDivider.style.cssText = "font-weight:800; font-size:16px; margin: 10px 0 2px; color: var(--accent);";
+        dayDivider.textContent = `🗓 ${d.getDate()} ${MONTH_NAMES[d.getMonth()]} (${dayInfo.day_name}):`;
+        container.appendChild(dayDivider);
+
+        dayInfo.lessons.forEach(l => {
+          const card = document.createElement("div");
+          card.className = "lesson-card";
+          card.innerHTML = `
+            <div class="lesson-header">
+              <span class="lesson-time">⏰ ${l.time}</span>
+              <span class="lesson-type">${l.type || ""}</span>
+            </div>
+            <div class="lesson-title">${l.subject}</div>
+            <div class="lesson-teacher">👤 ${l.teacher}</div>
+            ${l.link ? `<a href="${l.link}" target="_blank" rel="noopener noreferrer" class="btn-mts">
+              <span>📹</span>
+              <span>Подключиться к занятию (МТС Линк)</span>
+            </a>` : ""}
+          `;
+          container.appendChild(card);
+        });
+      });
+    }
+
+    // Модалка календаря
+    const calModal = document.getElementById("calendarModal");
+    document.getElementById("dateModalTrigger").addEventListener("click", () => {
+      renderCalendar(currentDate);
+      calModal.classList.add("open");
+    });
+
+    document.getElementById("closeCalModal").addEventListener("click", () => {
+      calModal.classList.remove("open");
+    });
+
+    calModal.addEventListener("click", (e) => {
+      if (e.target === calModal) calModal.classList.remove("open");
+    });
+
+    function renderCalendar(baseDate) {
+      const year = baseDate.getFullYear();
+      const month = baseDate.getMonth();
+      document.getElementById("calMonthTitle").textContent = `${MONTH_NAMES[month].charAt(0).toUpperCase() + MONTH_NAMES[month].slice(1)} ${year}`;
+
+      const grid = document.getElementById("calGrid");
+      grid.innerHTML = "";
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const offset = (firstDay + 6) % 7; // Понедельник = 0
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < offset; i++) {
+        const empty = document.createElement("div");
+        empty.className = "cal-day empty";
+        grid.appendChild(empty);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const btn = document.createElement("button");
+        btn.className = "cal-day";
+        btn.textContent = day;
+
+        const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        if (SCHEDULE[dateStr]) {
+          btn.classList.add("has-class");
+        }
+        if (dateStr === selectedDateKey) {
+          btn.classList.add("active");
+        }
+
+        btn.addEventListener("click", () => {
+          selectedDateKey = dateStr;
+          currentDate = new Date(year, month, day);
+          resetActiveChips();
+          renderDay(selectedDateKey);
+          calModal.classList.remove("open");
+        });
+
+        grid.appendChild(btn);
+      }
+    }
+
+    // Вкладки Расписание / Заметки
+    const tabSchedule = document.getElementById("tabSchedule");
+    const tabNotes = document.getElementById("tabNotes");
+    const scheduleSection = document.getElementById("scheduleSection");
+    const notesSection = document.getElementById("notesSection");
+
+    tabSchedule.addEventListener("click", () => {
+      tabSchedule.classList.add("active");
+      tabNotes.classList.remove("active");
+      scheduleSection.style.display = "block";
+      notesSection.classList.remove("active");
+    });
+
+    tabNotes.addEventListener("click", () => {
+      tabNotes.classList.add("active");
+      tabSchedule.classList.remove("active");
+      scheduleSection.style.display = "none";
+      notesSection.classList.add("active");
+      renderNotes();
+    });
+
+    // Логика Заметок (localStorage)
+    function getStoredNotes() {
+      try {
+        return JSON.parse(localStorage.getItem("ranepa_notes") || "[]");
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveNotes(notes) {
+      localStorage.setItem("ranepa_notes", JSON.stringify(notes));
+    }
+
+    function renderNotes() {
+      const notes = getStoredNotes();
+      const container = document.getElementById("notesListContainer");
+      container.innerHTML = "";
+
+      if (notes.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📝</div>
+            <div class="empty-title">Заметок пока нет</div>
+            <div class="empty-desc">Запиши домашку, темы семинаров или важные задачи. Всё сохранится прямо в телефоне!</div>
+          </div>
+        `;
+        return;
+      }
+
+      notes.forEach((n, idx) => {
+        const item = document.createElement("div");
+        item.className = `note-item ${n.done ? "done" : ""}`;
+        item.innerHTML = `
+          <div class="note-checkbox">${n.done ? "✓" : ""}</div>
+          <div class="note-text">${n.text}</div>
+          <button class="btn-del-note" title="Удалить">✕</button>
+        `;
+
+        item.querySelector(".note-checkbox").addEventListener("click", () => {
+          notes[idx].done = !notes[idx].done;
+          saveNotes(notes);
+          renderNotes();
+        });
+
+        item.querySelector(".btn-del-note").addEventListener("click", (e) => {
+          e.stopPropagation();
+          notes.splice(idx, 1);
+          saveNotes(notes);
+          renderNotes();
+        });
+
+        container.appendChild(item);
+      });
+    }
+
+    document.getElementById("addNoteBtn").addEventListener("click", addNote);
+    document.getElementById("noteInput").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") addNote();
+    });
+
+    function addNote() {
+      const inp = document.getElementById("noteInput");
+      const text = inp.value.trim();
+      if (!text) return;
+
+      const notes = getStoredNotes();
+      notes.unshift({ text, done: false, date: new Date().toISOString() });
+      saveNotes(notes);
+      inp.value = "";
+      renderNotes();
+    }
+
+    // Регистрация Service Worker для оффлайн работы
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+
+    // Первоначальный запуск
+    renderDay(selectedDateKey);
+  </script>
+</body>
+</html>
