@@ -325,7 +325,7 @@
 
     .date-hero {
       text-align: center;
-      padding: 14px 0 2px;
+      padding: 4px 0 14px;
     }
 
     .date-numeric {
@@ -1111,6 +1111,13 @@
     <div id="scheduleSection">
       <!-- Навигатор по датам -->
       <div class="date-navigator">
+        <!-- Дата и день недели сверху -->
+        <div class="date-hero">
+          <div class="date-numeric" id="dateNumericDisplay">18.10.2026</div>
+          <div class="date-weekday" id="dayNameDisplay">Воскресенье</div>
+        </div>
+
+        <!-- Кнопки навигации снизу -->
         <div class="date-nav-bar">
           <button class="nav-arrow-btn" id="prevDayBtn" title="Предыдущий день">
             <span class="nav-chevron">‹</span>
@@ -1122,7 +1129,7 @@
             <span class="nav-cal-icon">
               <svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
             </span>
-            <span class="nav-date-text" id="navDateText">20 октября 2026 г.</span>
+            <span class="nav-date-text" id="navDateText">18 октября 2026 г.</span>
             <span class="nav-chevron">›</span>
           </button>
 
@@ -1131,11 +1138,6 @@
             <span class="nav-label-short">След.</span>
             <span class="nav-chevron">›</span>
           </button>
-        </div>
-
-        <div class="date-hero">
-          <div class="date-numeric" id="dateNumericDisplay">20.10.2026</div>
-          <div class="date-weekday" id="dayNameDisplay">Вторник</div>
         </div>
       </div>
 
@@ -1363,13 +1365,6 @@
     }
 
     let selectedDateKey = formatDateKey(currentDate);
-    if (!SCHEDULE[selectedDateKey] && availableDates.length > 0) {
-      const nextDate = availableDates.find(d => d >= selectedDateKey);
-      if (nextDate) {
-        selectedDateKey = nextDate;
-        currentDate = new Date(nextDate);
-      }
-    }
 
     // Тема (светлая/тёмная)
     function updateThemeIcon(theme) {
