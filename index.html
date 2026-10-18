@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>РАНХиГС М25-У • Расписание</title>
   
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -58,6 +58,10 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
     }
 
+    html, body {
+      overscroll-behavior-y: contain;
+    }
+
     body {
       background: var(--bg);
       color: var(--fg);
@@ -66,6 +70,15 @@
       flex-direction: column;
       transition: background-color 0.25s ease, color 0.25s ease;
       padding-bottom: calc(80px + var(--safe-bottom));
+      touch-action: pan-y;
+    }
+
+    #scheduleSection {
+      touch-action: pan-y;
+    }
+
+    button, a, .dock-tab, .quick-pill, .cal-day, .nav-arrow-btn, .nav-center-btn, .btn-icon {
+      touch-action: manipulation;
     }
 
     .container {
@@ -1746,21 +1759,33 @@
     // Свайп жесты влево/вправо для быстрой перемотки дней на телефоне
     let touchStartX = 0;
     let touchStartY = 0;
+    let touchStartTime = 0;
     const schedSection = document.getElementById("scheduleSection");
     if (schedSection) {
       schedSection.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-        touchStartY = e.changedTouches[0].screenY;
+        if (e.touches.length === 1) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+          touchStartTime = Date.now();
+        }
       }, { passive: true });
 
       schedSection.addEventListener('touchend', (e) => {
-        const diffX = e.changedTouches[0].screenX - touchStartX;
-        const diffY = e.changedTouches[0].screenY - touchStartY;
-        if (Math.abs(diffX) > 50 && Math.abs(diffY) < 60) {
-          if (diffX > 0) {
-            document.getElementById("prevDayBtn").click();
-          } else {
-            document.getElementById("nextDayBtn").click();
+        if (e.changedTouches.length === 1) {
+          const diffX = e.changedTouches[0].clientX - touchStartX;
+          const diffY = e.changedTouches[0].clientY - touchStartY;
+          const elapsed = Date.now() - touchStartTime;
+
+          // Четкий намеренный горизонтальный свайп:
+          // 1) Смещение по X больше 40px
+          // 2) Горизонтальное движение преобладает над вертикальным (|diffX| > |diffY| * 1.4)
+          // 3) Длительность менее 550мс (быстрое смахивание, а не медленный скролл)
+          if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.4 && elapsed < 550) {
+            if (diffX > 0) {
+              document.getElementById("prevDayBtn").click();
+            } else {
+              document.getElementById("nextDayBtn").click();
+            }
           }
         }
       }, { passive: true });
