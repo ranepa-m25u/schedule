@@ -391,6 +391,28 @@
     .date-hero {
       text-align: center;
       padding: 4px 0 14px;
+      transition: opacity 0.16s ease, transform 0.16s cubic-bezier(0.25, 1, 0.35, 1);
+      will-change: opacity, transform;
+    }
+
+    .date-hero.slide-out-left {
+      opacity: 0;
+      transform: translate3d(-16px, 0, 0);
+    }
+
+    .date-hero.slide-out-right {
+      opacity: 0;
+      transform: translate3d(16px, 0, 0);
+    }
+
+    .date-hero.slide-in-left {
+      opacity: 0;
+      transform: translate3d(-16px, 0, 0);
+    }
+
+    .date-hero.slide-in-right {
+      opacity: 0;
+      transform: translate3d(16px, 0, 0);
     }
 
     .date-numeric {
@@ -420,6 +442,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      transition: all 0.25s ease;
     }
 
     .countdown-info {
@@ -797,6 +820,8 @@
       align-items: flex-start;
       transform: translate3d(calc(-100% - 18px), 0, 0);
       will-change: transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
     }
 
     .slider-slide {
@@ -2299,25 +2324,43 @@
       }).join("");
     }
 
-    function updateDayHeaders(d) {
+    const SLIDE_DURATION = 350;
+    const SLIDE_EASING = 'transform 0.35s cubic-bezier(0.25, 1, 0.35, 1)';
+
+    function updateDayHeaders(d, direction = 0) {
       const pad = n => String(n).padStart(2, '0');
       const numericDate = `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
-
-      const dayNameElem = document.getElementById("dayNameDisplay");
-      if (dayNameElem) dayNameElem.textContent = DAY_NAMES[d.getDay()];
+      const dayName = DAY_NAMES[d.getDay()];
+      const navDate = `${d.getDate()} ${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()} г.`;
 
       const numDateElem = document.getElementById("dateNumericDisplay");
-      if (numDateElem) numDateElem.textContent = numericDate;
-
+      const dayNameElem = document.getElementById("dayNameDisplay");
       const navTextElem = document.getElementById("navDateText");
-      if (navTextElem) navTextElem.textContent = `${d.getDate()} ${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()} г.`;
-
       const heroElem = document.querySelector(".date-hero");
-      if (heroElem) {
-        heroElem.classList.remove("anim-hero-text");
-        void heroElem.offsetWidth;
-        heroElem.classList.add("anim-hero-text");
+
+      if (!direction || !heroElem) {
+        if (numDateElem) numDateElem.textContent = numericDate;
+        if (dayNameElem) dayNameElem.textContent = dayName;
+        if (navTextElem) navTextElem.textContent = navDate;
+        return;
       }
+
+      // Направленная плавная смена текста даты синхронно со слайдом
+      const outClass = direction > 0 ? "slide-out-left" : "slide-out-right";
+      const inClass = direction > 0 ? "slide-in-right" : "slide-in-left";
+
+      heroElem.classList.add(outClass);
+
+      setTimeout(() => {
+        if (numDateElem) numDateElem.textContent = numericDate;
+        if (dayNameElem) dayNameElem.textContent = dayName;
+        if (navTextElem) navTextElem.textContent = navDate;
+
+        heroElem.classList.remove(outClass);
+        heroElem.classList.add(inClass);
+        void heroElem.offsetWidth;
+        heroElem.classList.remove(inClass);
+      }, 150);
     }
 
     function updateSliderSlides() {
@@ -2351,7 +2394,7 @@
       const parts = dateKey.split("-");
       currentDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
 
-      updateDayHeaders(currentDate);
+      updateDayHeaders(currentDate, 0);
       updateSliderSlides();
       if (mode === "calendar") {
         slideCurrent.classList.remove("anim-fade-scale");
@@ -2368,40 +2411,46 @@
       if (isSliderAnimating) return;
       isSliderAnimating = true;
 
+      const targetDate = new Date(currentDate);
+      targetDate.setDate(targetDate.getDate() + 1);
+      updateDayHeaders(targetDate, 1);
+
       slideNext.style.height = 'auto';
       slideNext.style.overflow = 'visible';
-      sliderTrack.style.transition = 'transform 0.28s cubic-bezier(0.16, 1, 0.3, 1)';
+      sliderTrack.style.transition = SLIDE_EASING;
       sliderTrack.style.transform = `translate3d(calc(-200% - ${SLIDE_GAP * 2}px), 0, 0)`;
 
       setTimeout(() => {
-        currentDate.setDate(currentDate.getDate() + 1);
+        currentDate = targetDate;
         selectedDateKey = formatDateKey(currentDate);
-        updateDayHeaders(currentDate);
         updateSliderSlides();
         updateLiveBanner();
         updateNextLessonCountdown();
         isSliderAnimating = false;
-      }, 280);
+      }, SLIDE_DURATION);
     }
 
     function goToPrevDay() {
       if (isSliderAnimating) return;
       isSliderAnimating = true;
 
+      const targetDate = new Date(currentDate);
+      targetDate.setDate(targetDate.getDate() - 1);
+      updateDayHeaders(targetDate, -1);
+
       slidePrev.style.height = 'auto';
       slidePrev.style.overflow = 'visible';
-      sliderTrack.style.transition = 'transform 0.28s cubic-bezier(0.16, 1, 0.3, 1)';
+      sliderTrack.style.transition = SLIDE_EASING;
       sliderTrack.style.transform = 'translate3d(0%, 0, 0)';
 
       setTimeout(() => {
-        currentDate.setDate(currentDate.getDate() - 1);
+        currentDate = targetDate;
         selectedDateKey = formatDateKey(currentDate);
-        updateDayHeaders(currentDate);
         updateSliderSlides();
         updateLiveBanner();
         updateNextLessonCountdown();
         isSliderAnimating = false;
-      }, 280);
+      }, SLIDE_DURATION);
     }
 
     document.getElementById("prevDayBtn").addEventListener("click", goToPrevDay);
@@ -2460,44 +2509,23 @@
       if (!isDragging) return;
       isDragging = false;
       const elapsed = Date.now() - touchStartTime;
+      const velocity = Math.abs(currentDeltaX) / elapsed;
       const threshold = Math.min(window.innerWidth * 0.22, 85);
-      const isQuickFlick = Math.abs(currentDeltaX) > 30 && elapsed < 280;
+      const isQuickFlick = (velocity > 0.32 && Math.abs(currentDeltaX) > 20) || Math.abs(currentDeltaX) > threshold;
 
-      if (currentDeltaX < -threshold || (currentDeltaX < -25 && isQuickFlick)) {
-        isSliderAnimating = true;
-        sliderTrack.style.transition = 'transform 0.24s cubic-bezier(0.16, 1, 0.3, 1)';
-        sliderTrack.style.transform = `translate3d(calc(-200% - ${SLIDE_GAP * 2}px), 0, 0)`;
-        setTimeout(() => {
-          currentDate.setDate(currentDate.getDate() + 1);
-          selectedDateKey = formatDateKey(currentDate);
-          updateDayHeaders(currentDate);
-          updateSliderSlides();
-          updateLiveBanner();
-          updateNextLessonCountdown();
-          isSliderAnimating = false;
-        }, 240);
-      } else if (currentDeltaX > threshold || (currentDeltaX > 25 && isQuickFlick)) {
-        isSliderAnimating = true;
-        sliderTrack.style.transition = 'transform 0.24s cubic-bezier(0.16, 1, 0.3, 1)';
-        sliderTrack.style.transform = 'translate3d(0%, 0, 0)';
-        setTimeout(() => {
-          currentDate.setDate(currentDate.getDate() - 1);
-          selectedDateKey = formatDateKey(currentDate);
-          updateDayHeaders(currentDate);
-          updateSliderSlides();
-          updateLiveBanner();
-          updateNextLessonCountdown();
-          isSliderAnimating = false;
-        }, 240);
+      if (currentDeltaX < 0 && isQuickFlick) {
+        goToNextDay();
+      } else if (currentDeltaX > 0 && isQuickFlick) {
+        goToPrevDay();
       } else {
-        sliderTrack.style.transition = 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
+        sliderTrack.style.transition = 'transform 0.28s cubic-bezier(0.25, 1, 0.35, 1)';
         sliderTrack.style.transform = `translate3d(calc(-100% - ${SLIDE_GAP}px), 0, 0)`;
         setTimeout(() => {
           slidePrev.style.height = '0';
           slidePrev.style.overflow = 'hidden';
           slideNext.style.height = '0';
           slideNext.style.overflow = 'hidden';
-        }, 200);
+        }, 280);
       }
     }, { passive: true });
 
@@ -2529,22 +2557,23 @@
       isMouseDown = false;
       sliderViewport.classList.remove('grabbing');
       const elapsed = Date.now() - touchStartTime;
+      const velocity = Math.abs(currentDeltaX) / elapsed;
       const threshold = 70;
-      const isQuickFlick = Math.abs(currentDeltaX) > 30 && elapsed < 280;
+      const isQuickFlick = (velocity > 0.32 && Math.abs(currentDeltaX) > 20) || Math.abs(currentDeltaX) > threshold;
 
       if (currentDeltaX < -threshold || (currentDeltaX < -25 && isQuickFlick)) {
         goToNextDay();
       } else if (currentDeltaX > threshold || (currentDeltaX > 25 && isQuickFlick)) {
         goToPrevDay();
       } else {
-        sliderTrack.style.transition = 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
+        sliderTrack.style.transition = 'transform 0.28s cubic-bezier(0.25, 1, 0.35, 1)';
         sliderTrack.style.transform = `translate3d(calc(-100% - ${SLIDE_GAP}px), 0, 0)`;
         setTimeout(() => {
           slidePrev.style.height = '0';
           slidePrev.style.overflow = 'hidden';
           slideNext.style.height = '0';
           slideNext.style.overflow = 'hidden';
-        }, 200);
+        }, 280);
       }
     });
 
