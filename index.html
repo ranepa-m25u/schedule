@@ -306,9 +306,9 @@
       gap: 6px;
       padding: 9px 12px;
       border-radius: 12px;
-      border: 1px solid var(--line);
-      background: var(--chip-bg);
-      color: var(--fg);
+      border: 1px solid transparent;
+      background: var(--accent);
+      color: #ffffff;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
@@ -316,11 +316,17 @@
       user-select: none;
       text-align: center;
       min-width: 0;
+      box-shadow: 0 2px 8px rgba(229, 57, 53, 0.25);
+    }
+
+    .nav-center-btn:hover {
+      background: var(--accent-hover);
     }
 
     .nav-center-btn:active {
       transform: scale(0.97);
-      background: var(--hover-bg);
+      background: var(--accent-hover);
+      box-shadow: 0 1px 4px rgba(229, 57, 53, 0.2);
     }
 
     .nav-date-text {
