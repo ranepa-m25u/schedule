@@ -505,7 +505,8 @@
       gap: 14px;
     }
 
-    .lesson-card {
+    /* Единая карточка занятия */
+    .session-card, .lesson-card {
       background: var(--card-bg);
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -516,62 +517,58 @@
       transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
-    .lesson-card.is-now {
+    .session-card.is-now, .lesson-card.is-now {
       border: 2px solid var(--accent);
       box-shadow: 0 8px 26px var(--accent-soft);
     }
 
-    .now-indicator {
-      display: inline-flex;
+    .session-card.is-past, .lesson-card.is-past {
+      opacity: 0.68;
+    }
+
+    .session-header {
+      display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .session-badge {
       font-size: 11px;
       font-weight: 700;
       color: var(--accent);
       background: var(--accent-soft);
-      padding: 3px 8px;
+      padding: 3px 10px;
       border-radius: 99px;
-      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
 
-    .lesson-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .lesson-time {
+    .session-duration {
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--fg);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
       background: var(--chip-bg);
       border: 1px solid var(--line);
-      padding: 4px 10px;
+      padding: 3px 9px;
       border-radius: 8px;
-      letter-spacing: -0.2px;
-    }
-      letter-spacing: -0.2px;
+      white-space: nowrap;
     }
 
-    .lesson-type {
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .lesson-title {
-      font-size: 17px;
-      font-weight: 700;
+    .session-title {
+      font-size: 18px;
+      font-weight: 800;
       line-height: 1.35;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       color: var(--fg);
     }
 
-    .lesson-teacher {
+    .session-teacher {
       display: flex;
       align-items: center;
       gap: 6px;
@@ -581,13 +578,186 @@
       margin-bottom: 14px;
     }
 
+    /* Таймлайн пар внутри единой карточки */
+    .session-timeline {
+      display: flex;
+      flex-direction: column;
+      background: var(--chip-bg);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 8px 10px;
+      margin-bottom: 14px;
+      gap: 4px;
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 8px;
+      border-radius: 10px;
+      transition: all 0.15s ease;
+    }
+
+    .timeline-item.active {
+      background: var(--card-bg);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    [data-theme="dark"] .timeline-item.active {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .timeline-bullet {
+      width: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .bullet-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--line);
+      border: 2px solid var(--muted);
+      transition: all 0.2s ease;
+    }
+
+    .timeline-item.active .bullet-dot {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: notif-pulse 1.2s infinite;
+    }
+
+    .timeline-item.past .bullet-dot {
+      background: #10b981;
+      border-color: #10b981;
+      opacity: 0.8;
+    }
+
+    .timeline-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .timeline-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .slot-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--fg);
+      white-space: nowrap;
+    }
+
+    .slot-time {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .slot-status {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      white-space: nowrap;
+      color: var(--muted);
+    }
+
+    .timeline-item.active .slot-status {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .timeline-item.past .slot-status {
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    /* Разделитель перемены внутри таймлайна */
+    .timeline-break {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 8px;
+      margin: 1px 0;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .break-ico {
+      font-size: 13px;
+      line-height: 1;
+      display: inline-block;
+    }
+
+    .break-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .break-pill-inner {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .timeline-break.break-active {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(229, 57, 53, 0.14));
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      padding: 8px 10px;
+      animation: break-pulse 2s infinite ease-in-out;
+    }
+
+    .timeline-break.break-active .break-pill-inner {
+      color: #b45309;
+      font-weight: 700;
+    }
+
+    [data-theme="dark"] .timeline-break.break-active .break-pill-inner {
+      color: #fbbf24;
+    }
+
+    .timeline-break.break-active .break-ico {
+      animation: break-bounce 1s infinite alternate ease-in-out;
+    }
+
+    @keyframes break-bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-2px) scale(1.15); }
+    }
+
+    @keyframes break-pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15);
+      }
+      50% {
+        transform: scale(1.01);
+        box-shadow: 0 6px 18px rgba(245, 158, 11, 0.25);
+      }
+    }
+
+    /* Кнопка вебинара МТС Линк */
     .btn-mts {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       width: 100%;
-      padding: 11px 16px;
+      padding: 12px 16px;
       border-radius: 12px;
       border: 0;
       background: linear-gradient(135deg, #e30611, #ff2a38);
@@ -603,68 +773,6 @@
     .btn-mts:active {
       transform: scale(0.98);
       box-shadow: 0 2px 8px rgba(227, 6, 17, 0.4);
-    }
-
-    .lesson-card.is-past {
-      opacity: 0.65;
-    }
-
-    /* Разделитель перемены между парами */
-    .break-divider {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 10px 14px;
-      background: var(--chip-bg);
-      border: 1px dashed var(--line);
-      border-radius: 14px;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 600;
-      text-align: center;
-      transition: all 0.25s ease;
-      margin: 2px 0;
-    }
-
-    .break-divider.active {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.16), rgba(229, 57, 53, 0.12));
-      border: 1px solid rgba(245, 158, 11, 0.45);
-      color: #b45309;
-      font-weight: 700;
-      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15);
-      animation: break-pulse 2s infinite ease-in-out;
-    }
-
-    [data-theme="dark"] .break-divider.active {
-      color: #fbbf24;
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(255, 82, 82, 0.16));
-      border-color: rgba(245, 158, 11, 0.5);
-    }
-
-    @keyframes break-pulse {
-      0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15);
-      }
-      50% {
-        transform: scale(1.01);
-        box-shadow: 0 6px 18px rgba(245, 158, 11, 0.25);
-      }
-    }
-
-    .break-divider .break-icon {
-      font-size: 16px;
-      display: inline-block;
-    }
-
-    .break-divider.active .break-icon {
-      animation: break-bounce 1s infinite alternate ease-in-out;
-    }
-
-    @keyframes break-bounce {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-2px) scale(1.1); }
     }
 
     /* Карусель расписания с отслеживанием пальца 1:1 */
@@ -1993,72 +2101,134 @@
       const now = new Date();
       const nowMin = now.getHours() * 60 + now.getMinutes();
 
-      let html = "";
-      for (let i = 0; i < dayInfo.lessons.length; i++) {
-        const l = dayInfo.lessons[i];
-        const [startStr, endStr] = l.time.split(" - ");
-        const [sh, sm] = startStr.split(":").map(Number);
-        const [eh, em] = endStr.split(":").map(Number);
-        const startMin = sh * 60 + sm;
-        const endMin = eh * 60 + em;
+      // Группируем пары по одинаковому предмету и преподавателю в единую аккуратную карточку
+      const groups = [];
+      dayInfo.lessons.forEach(l => {
+        const lastGroup = groups[groups.length - 1];
+        if (lastGroup && lastGroup.subject === l.subject && lastGroup.teacher === l.teacher) {
+          lastGroup.slots.push(l);
+        } else {
+          groups.push({
+            subject: l.subject,
+            teacher: l.teacher,
+            type: l.type.replace(/\s*\(\d+-я\s*пара\)/i, "").trim(),
+            link: l.link,
+            slots: [l]
+          });
+        }
+      });
 
-        const isCurrent = isToday && (nowMin >= startMin && nowMin < endMin);
-        const isPast = isToday && (nowMin >= endMin);
+      return groups.map(g => {
+        const firstStart = g.slots[0].time.split(" - ")[0];
+        const lastEnd = g.slots[g.slots.length - 1].time.split(" - ")[1];
 
-        html += `
-          <div class="lesson-card ${isCurrent ? 'is-now' : ''} ${isPast ? 'is-past' : ''}">
-            ${isCurrent ? `
-              <div class="now-indicator">
-                <span class="live-dot"></span>
-                <span>ИДЁТ СЕЙЧАС</span>
+        let isAnyNow = false;
+        let isAllPast = isToday;
+
+        const slotsHtml = [];
+
+        g.slots.forEach((s, idx) => {
+          const [sh, sm] = s.time.split(" - ")[0].split(":").map(Number);
+          const [eh, em] = s.time.split(" - ")[1].split(":").map(Number);
+          const startMin = sh * 60 + sm;
+          const endMin = eh * 60 + em;
+
+          const isNow = isToday && (nowMin >= startMin && nowMin < endMin);
+          const isPast = isToday && (nowMin >= endMin);
+
+          if (isNow) isAnyNow = true;
+          if (!isPast) isAllPast = false;
+
+          let statusText = "";
+          if (isNow) statusText = "Идёт сейчас";
+          else if (isPast) statusText = "Завершена ✓";
+          else if (isToday) statusText = "Скоро";
+
+          slotsHtml.push(`
+            <div class="timeline-item ${isNow ? 'active' : ''} ${isPast ? 'past' : ''}">
+              <div class="timeline-bullet">
+                <span class="bullet-dot"></span>
               </div>
-            ` : ""}
-            <div class="lesson-header">
-              <span class="lesson-time">
-                <svg class="svg-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                <span>${l.time}</span>
-              </span>
-              <span class="lesson-type">${l.type || "Занятие"}</span>
+              <div class="timeline-body">
+                <div class="timeline-row">
+                  <span class="slot-name">${idx + 1}-я пара</span>
+                  <span class="slot-time">${s.time}</span>
+                  ${statusText ? `<span class="slot-status">${statusText}</span>` : ""}
+                </div>
+              </div>
             </div>
-            <div class="lesson-title">${l.subject}</div>
-            <div class="lesson-teacher">
-              <svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              <span>${l.teacher || "Преподаватель не указан"}</span>
-            </div>
-            ${l.link ? `<a href="${l.link}" target="_blank" rel="noopener noreferrer" class="btn-mts">
-              <svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
-              <span>Подключиться к занятию (МТС Линк)</span>
-            </a>` : ""}
-          </div>
-        `;
+          `);
 
-        // Разделитель перемены между парами
-        if (i < dayInfo.lessons.length - 1) {
-          const nextL = dayInfo.lessons[i + 1];
-          const [nsh, nsm] = nextL.time.split(" - ")[0].split(":").map(Number);
-          const nextStartMin = nsh * 60 + nsm;
-          const breakMin = nextStartMin - endMin;
+          // Разделитель перемены между парами
+          if (idx < g.slots.length - 1) {
+            const nextS = g.slots[idx + 1];
+            const [nsh, nsm] = nextS.time.split(" - ")[0].split(":").map(Number);
+            const nextStartMin = nsh * 60 + nsm;
+            const breakDuration = nextStartMin - endMin;
 
-          if (breakMin > 0) {
             const isBreakNow = isToday && (nowMin >= endMin && nowMin < nextStartMin);
-            const remainingBreak = nextStartMin - nowMin;
+            const breakRem = nextStartMin - nowMin;
 
-            html += `
-              <div class="break-divider ${isBreakNow ? 'active' : ''}">
-                <span class="break-icon">☕</span>
-                <span class="break-text">
-                  ${isBreakNow
-                    ? `Сейчас перемена, следующая пара начнется через ${formatMinutes(remainingBreak)}`
-                    : `Перемена ${breakMin} минут (${endStr} — ${nextL.time.split(' - ')[0]})`
-                  }
-                </span>
+            slotsHtml.push(`
+              <div class="timeline-break ${isBreakNow ? 'break-active' : ''}">
+                <div class="timeline-bullet">
+                  <span class="break-ico">☕</span>
+                </div>
+                <div class="break-body">
+                  <div class="break-pill-inner">
+                    ${isBreakNow
+                      ? `Сейчас перемена • до 2-й пары ${formatMinutes(breakRem)}`
+                      : `Перемена ${breakDuration} минут (${s.time.split(' - ')[1]} — ${nextS.time.split(' - ')[0]})`
+                    }
+                  </div>
+                </div>
               </div>
-            `;
+            `);
+          }
+        });
+
+        // Проверяем, идет ли прямо сейчас перемена
+        let activeBreakInGroup = false;
+        if (isToday) {
+          for (let i = 0; i < g.slots.length - 1; i++) {
+            const [eh, em] = g.slots[i].time.split(" - ")[1].split(":").map(Number);
+            const [nsh, nsm] = g.slots[i + 1].time.split(" - ")[0].split(":").map(Number);
+            if (nowMin >= (eh * 60 + em) && nowMin < (nsh * 60 + nsm)) {
+              activeBreakInGroup = true;
+              break;
+            }
           }
         }
-      }
 
-      return html;
+        return `
+          <div class="session-card ${isAnyNow || activeBreakInGroup ? 'is-now' : ''} ${isAllPast ? 'is-past' : ''}">
+            <div class="session-header">
+              <span class="session-badge">${g.type || "Занятие"}</span>
+              <span class="session-duration">
+                <svg class="svg-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>${g.slots.length > 1 ? `${g.slots.length} пары • ` : ""}${firstStart} – ${lastEnd}</span>
+              </span>
+            </div>
+
+            <div class="session-title">${g.subject}</div>
+            <div class="session-teacher">
+              <svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>${g.teacher || "Преподаватель не указан"}</span>
+            </div>
+
+            <div class="session-timeline">
+              ${slotsHtml.join("")}
+            </div>
+
+            ${g.link ? `
+              <a href="${g.link}" target="_blank" rel="noopener noreferrer" class="btn-mts">
+                <svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
+                <span>Подключиться к занятию (МТС Линк)</span>
+              </a>
+            ` : ""}
+          </div>
+        `;
+      }).join("");
     }
 
     function updateDayHeaders(d) {
@@ -2328,43 +2498,14 @@
         const dayInfo = SCHEDULE[dateKey];
 
         const dayDivider = document.createElement("div");
-        dayDivider.style.cssText = "font-weight:800; font-size:16px; margin: 10px 0 2px; color: var(--accent);";
+        dayDivider.style.cssText = "font-weight:800; font-size:16px; margin: 16px 0 6px; color: var(--accent);";
         dayDivider.textContent = `🗓 ${d.getDate()} ${MONTH_NAMES[d.getMonth()]} (${dayInfo.day_name}):`;
         container.appendChild(dayDivider);
 
-        dayInfo.lessons.forEach((l, idx) => {
-          const card = document.createElement("div");
-          card.className = "lesson-card";
-          card.innerHTML = `
-            <div class="lesson-header">
-              <span class="lesson-time">
-                <svg class="svg-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                <span>${l.time}</span>
-              </span>
-              <span class="lesson-type">${l.type || ""}</span>
-            </div>
-            <div class="lesson-title">${l.subject}</div>
-            <div class="lesson-teacher">
-              <svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              <span>${l.teacher}</span>
-            </div>
-            ${l.link ? `<a href="${l.link}" target="_blank" rel="noopener noreferrer" class="btn-mts">
-              <svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
-              <span>Подключиться к занятию (МТС Линк)</span>
-            </a>` : ""}
-          `;
-          container.appendChild(card);
-
-          if (idx < dayInfo.lessons.length - 1) {
-            const nextL = dayInfo.lessons[idx + 1];
-            const endStr = l.time.split(" - ")[1];
-            const nextStartStr = nextL.time.split(" - ")[0];
-            const brk = document.createElement("div");
-            brk.className = "break-divider";
-            brk.innerHTML = `<span class="break-icon">☕</span><span>Перемена 10 минут (${endStr} — ${nextStartStr})</span>`;
-            container.appendChild(brk);
-          }
-        });
+        const dayWrapper = document.createElement("div");
+        dayWrapper.style.cssText = "display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px;";
+        dayWrapper.innerHTML = getDayLessonsHTML(dateKey);
+        container.appendChild(dayWrapper);
       });
     }
 
