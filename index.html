@@ -2,14 +2,14 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>РАНХиГС М25-У • Расписание</title>
   
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="М25-У Учёба" />
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#12161f" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f4f5f8" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0d111a" media="(prefers-color-scheme: dark)" />
 
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="ranepa_crest.png" type="image/png" />
@@ -1455,6 +1455,87 @@
       transform: translateX(-50%) translateY(0);
       opacity: 1;
     }
+
+    /* ===== Редизайн: поверх базовых стилей ===== */
+    :root{--bg:#f4f5f8;--card-bg:#fff;--fg:#0f1623;--muted:#5a6679;--line:#e2e6ed;--accent:#8a5d0c;--accent-soft:rgba(138,93,12,.1);--accent-hover:#74500a;--accent-ink:#fff;--chip-bg:#eef1f5;--shadow:0 1px 2px rgba(15,22,35,.05);--shadow-hover:var(--shadow);--radius:20px}
+    [data-theme="dark"]{--bg:#0d111a;--card-bg:#151b28;--fg:#eef1f6;--muted:#9aa7bd;--line:#252e43;--accent:#e2b45c;--accent-soft:rgba(226,180,92,.14);--accent-hover:#efc579;--accent-ink:#1c1503;--chip-bg:#1b2333;--shadow:none;--shadow-hover:none}
+    .brand-title{font-size:17px;font-weight:700;letter-spacing:-.2px}
+    .brand-subtitle{font-size:12.5px}
+    .btn-icon{box-shadow:none}
+    .logo-badge{box-shadow:none}
+    .notif-dot{top:8px;right:8px;width:7px;height:7px;background:var(--accent);box-shadow:none;animation:none}
+    .date-navigator{padding:10px;box-shadow:none}
+    .date-nav-bar{gap:8px}
+    .nav-arrow-btn{width:46px;height:46px;padding:0;border-radius:14px;background:var(--chip-bg);color:var(--fg);border:1px solid var(--line);box-shadow:none}
+    .nav-arrow-btn:hover,.nav-arrow-btn:active{background:var(--chip-bg);box-shadow:none}
+    .nav-center-btn{flex-direction:column;gap:1px;padding:4px 8px;background:transparent;color:var(--fg);box-shadow:none}
+    .nav-center-btn:hover,.nav-center-btn:active{background:var(--chip-bg);box-shadow:none}
+    .date-hero{padding:4px 8px;text-align:center}
+    .date-weekday{font-size:20px;font-weight:700;margin:0;letter-spacing:-.2px}
+    .nav-date-text{font-size:13px;font-weight:500;color:var(--muted)}
+    .countdown-card{box-shadow:none}
+    .countdown-card.compact{padding:10px 14px}
+    .countdown-card.compact .countdown-subject,.countdown-card.compact .countdown-meta,.countdown-card.compact .countdown-goto-btn{display:none}
+    .countdown-card.compact .countdown-right{align-items:center}
+    .countdown-badge,.session-badge,.live-badge{text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:600}
+    .countdown-subject{font-weight:700}
+    .countdown-pill{font-weight:600}
+    .session-card,.lesson-card{padding:18px;box-shadow:none}
+    .session-card.is-now,.lesson-card.is-now{border:1px solid var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+    .session-badge{background:none;padding:0;border-radius:0;color:var(--muted)}
+    .session-badge::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:1px}
+    .session-duration{background:none;border:0;padding:0;font-variant-numeric:tabular-nums}
+    .session-title{font-size:20px;font-weight:700;letter-spacing:-.2px}
+    .session-teacher{font-size:14px;margin-bottom:16px}
+    .session-timeline{background:none;border:0;border-top:1px solid var(--line);border-radius:0;padding:0;gap:0;margin-bottom:16px}
+    .timeline-item{padding:12px 0;border-radius:0;border-bottom:1px solid var(--line)}
+    .timeline-item.active{background:none;box-shadow:none}
+    .timeline-row{display:grid;grid-template-columns:1fr auto 78px;gap:10px;align-items:center}
+    .slot-name{font-weight:600}
+    .slot-time{color:var(--fg);text-align:right}
+    .slot-status{padding:0;background:none!important;text-align:right;font-size:12.5px;font-weight:600}
+    [data-theme] .timeline-item.active .slot-status{color:var(--accent)}
+    [data-theme] .timeline-item.past .slot-status{color:var(--muted)}
+    .timeline-item.past{opacity:.6}
+    .bullet-dot{width:10px;height:10px;background:transparent;border:2px solid var(--muted)}
+    .timeline-item.active .bullet-dot{background:var(--accent);border-color:var(--accent);box-shadow:none}
+    .timeline-item.past .bullet-dot{background:var(--muted);border-color:var(--muted);opacity:1}
+    .timeline-break{padding:9px 0;margin:0;border-bottom:1px solid var(--line);border-radius:0}
+    .timeline-break.break-active{background:var(--accent-soft);border:0;border-radius:10px;padding:9px 8px;animation:none}
+    [data-theme] .timeline-break.break-active .break-pill-inner{color:var(--accent)}
+    .break-line{width:1px;height:14px;background:var(--muted);opacity:.5;display:block}
+    .break-pill-inner{font-size:12.5px}
+    .session-timeline>:last-child{border-bottom:0}
+    .btn-mts{background:#e30611;box-shadow:none;font-weight:600;padding:14px 16px;border-radius:14px}
+    .live-banner,.live-banner.break-mode{background:var(--card-bg);border:1px solid var(--accent)}
+    .live-banner.break-mode{border-color:var(--line)}
+    [data-theme] .live-banner.break-mode .live-badge{color:var(--muted)}
+    .live-banner.break-mode .live-dot{background:var(--muted);box-shadow:none}
+    .btn-live-join{background:var(--accent);color:var(--accent-ink);box-shadow:none;padding:8px 14px;border-radius:12px;font-weight:600;font-size:13px}
+    .bottom-dock{box-shadow:0 8px 24px rgba(0,0,0,.18)}
+    .dock-tab{font-weight:600}
+    .dock-tab.active{background:var(--accent-soft);color:var(--accent);box-shadow:none}
+    .cal-day.active{background:var(--accent);color:var(--accent-ink)!important}
+    .cal-day.has-class::after{background:var(--accent)}
+    .cal-day.active.has-class::after{background:var(--accent-ink)}
+    .modal-head-title,.empty-title{font-weight:700}
+    .btn-cal-export{background:var(--accent);color:var(--accent-ink);box-shadow:none}
+    .note-card-form{box-shadow:none}
+    .note-input,.note-datetime-inp{font-size:16px}
+    .note-input{height:46px}
+    .time-inp-pill{min-height:46px;padding:0 14px;gap:10px;color:var(--muted)}
+    .time-label{font-size:14px;font-weight:600;white-space:nowrap}
+    .note-datetime-inp{min-width:0;text-align:right;font-weight:600;color-scheme:light dark}
+    .quick-pill-row{flex-wrap:wrap;overflow:visible;gap:8px}
+    .quick-pill{padding:8px 12px;font-size:12.5px;font-weight:600;border-radius:999px}
+    .quick-pill.selected{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+    .btn-add{height:48px;font-size:15px;font-weight:700;background:var(--accent);color:var(--accent-ink);box-shadow:none}
+    .note-item{box-shadow:none}
+    .note-time-badge{font-weight:600}
+    .btn-note-cal{color:var(--muted);background:var(--chip-bg);border:1px solid var(--line);font-weight:600}
+    .note-checkbox{width:24px;height:24px;border-radius:8px}
+    .note-item.done .note-checkbox{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+    .btn-del-note{width:40px;height:40px;display:grid;place-items:center;margin:-8px -10px 0 0;opacity:.7}
   </style>
 </head>
 <body>
@@ -1496,7 +1577,7 @@
       </div>
       <a href="#" target="_blank" rel="noopener noreferrer" class="btn-live-join" id="liveJoinBtn">
         <svg class="svg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
-        <span>В вебинар ➔</span>
+        <span>В вебинар</span>
       </a>
     </div>
 
@@ -1504,31 +1585,17 @@
     <div id="scheduleSection">
       <!-- Навигатор по датам -->
       <div class="date-navigator">
-        <!-- Дата и день недели сверху -->
-        <div class="date-hero">
-          <div class="date-numeric" id="dateNumericDisplay">18.10.2026</div>
-          <div class="date-weekday" id="dayNameDisplay">Воскресенье</div>
-        </div>
-
-        <!-- Кнопки навигации снизу -->
         <div class="date-nav-bar">
-          <button class="nav-arrow-btn" id="prevDayBtn" title="Предыдущий день">
-            <span class="nav-chevron">‹</span>
-            <span class="nav-label-long">Предыдущий день</span>
-            <span class="nav-label-short">Пред.</span>
+          <button class="nav-arrow-btn" id="prevDayBtn" title="Предыдущий день" aria-label="Предыдущий день">
+            <svg class="svg-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </button>
-
-          <button class="nav-center-btn" id="dateModalTrigger" title="Выбрать дату в календаре">
-            <span class="nav-cal-icon">
-              <svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-            </span>
+          <button class="nav-center-btn date-hero" id="dateModalTrigger" title="Выбрать дату в календаре">
+            <span class="date-weekday" id="dayNameDisplay">Воскресенье</span>
             <span class="nav-date-text" id="navDateText">18 октября 2026 г.</span>
+            <span id="dateNumericDisplay" hidden></span>
           </button>
-
-          <button class="nav-arrow-btn" id="nextDayBtn" title="Следующий день">
-            <span class="nav-label-long">Следующий день</span>
-            <span class="nav-label-short">След.</span>
-            <span class="nav-chevron">›</span>
+          <button class="nav-arrow-btn" id="nextDayBtn" title="Следующий день" aria-label="Следующий день">
+            <svg class="svg-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
           </button>
         </div>
       </div>
@@ -1545,7 +1612,7 @@
         </div>
         <div class="countdown-right">
           <div class="countdown-pill" id="nextLessonTimer">—</div>
-          <button type="button" class="countdown-goto-btn" id="nextLessonGotoBtn">К дате ➔</button>
+          <button type="button" class="countdown-goto-btn" id="nextLessonGotoBtn">К дате</button>
         </div>
       </div>
 
@@ -1569,6 +1636,7 @@
         <div class="note-time-bar">
           <div class="time-inp-pill">
             <svg class="svg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span class="time-label">Напомнить</span>
             <input type="datetime-local" class="note-datetime-inp" id="noteDatetimeInp" title="Выбрать время напоминания" />
           </div>
           <div class="quick-pill-row">
@@ -1580,7 +1648,7 @@
         </div>
 
         <button class="btn-add" id="addNoteBtn">
-          <span>➕ Добавить заметку</span>
+          <svg class="svg-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>Добавить заметку</span>
         </button>
       </div>
 
@@ -1605,7 +1673,7 @@
     <div class="modal-card">
       <div class="modal-head">
         <div class="modal-head-title" id="calMonthTitle">Октябрь 2026</div>
-        <button class="btn-icon" id="closeCalModal" style="width:32px;height:32px;font-size:14px;">✕</button>
+        <button class="btn-icon" id="closeCalModal" style="width:32px;height:32px;font-size:14px;" aria-label="Закрыть"><svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="cal-weekdays">
         <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
@@ -1618,8 +1686,8 @@
   <div class="modal-overlay" id="notifModal">
     <div class="modal-card">
       <div class="modal-head">
-        <div class="modal-head-title">🔔 Напоминания</div>
-        <button class="btn-icon" id="closeNotifModal" style="width:32px;height:32px;font-size:14px;">✕</button>
+        <div class="modal-head-title">Напоминания</div>
+        <button class="btn-icon" id="closeNotifModal" style="width:32px;height:32px;font-size:14px;" aria-label="Закрыть"><svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
       </div>
 
       <!-- Настройка Пуш-уведомлений -->
@@ -1638,12 +1706,11 @@
 
       <!-- Добавление в календарь телефона -->
       <div class="notif-block">
-        <div class="notif-block-title">📅 Календарь телефона (.ics)</div>
+        <div class="notif-block-title">Календарь телефона (.ics)</div>
         <div class="notif-block-desc" style="margin-bottom: 8px;">
           Добавь все пары сразу в системный календарь (iPhone / Android) со встроенными напоминаниями и ссылками.
         </div>
         <button class="btn-modal-action btn-cal-export" id="exportIcsBtn">
-          <span>📲</span>
           <span>Добавить в календарь телефона</span>
         </button>
       </div>
@@ -1915,7 +1982,7 @@
           btn.href = lesson.link || "#";
           btn.innerHTML = `
             <svg class="svg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
-            <span>В вебинар ➔</span>
+            <span>В вебинар</span>
           `;
           return;
         }
@@ -1931,13 +1998,13 @@
             banner.style.display = "flex";
             banner.classList.add("active");
             banner.classList.add("break-mode");
-            document.getElementById("liveStatusText").textContent = "Сейчас перемена ☕";
+            document.getElementById("liveStatusText").textContent = "Сейчас перемена";
             document.getElementById("liveSubjectText").textContent = `Следующая пара начнется через ${formatMinutes(diff)} • ${nextLesson.subject}`;
             const btn = document.getElementById("liveJoinBtn");
             btn.href = nextLesson.link || "#";
             btn.innerHTML = `
               <svg class="svg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
-              <span>К следующей паре ➔</span>
+              <span>К следующей паре</span>
             `;
             return;
           }
@@ -1959,7 +2026,7 @@
         btn.href = firstLesson.link || "#";
         btn.innerHTML = `
           <svg class="svg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
-          <span>В вебинар ➔</span>
+          <span>В вебинар</span>
         `;
         return;
       }
@@ -2028,6 +2095,7 @@
       }
 
       card.style.display = "flex";
+      card.classList.toggle("compact", nextDateKey === selectedDateKey);
       const [y, m, d] = nextDateKey.split("-").map(Number);
       const [sh, sm] = nextLesson.time.split(" - ")[0].split(":").map(Number);
       const lessonStartDate = new Date(y, m - 1, d, sh, sm, 0);
@@ -2038,7 +2106,7 @@
       const countdownBadgeSpan = card.querySelector(".countdown-badge span");
 
       if (isBreakNow) {
-        if (countdownBadgeSpan) countdownBadgeSpan.textContent = "Сейчас перемена ☕";
+        if (countdownBadgeSpan) countdownBadgeSpan.textContent = "Сейчас перемена";
         timerStr = `через ${formatMinutes(breakDiffMin)}`;
       } else {
         if (countdownBadgeSpan) countdownBadgeSpan.textContent = "Ближайшая пара";
@@ -2141,7 +2209,7 @@
 
           let statusText = "";
           if (isNow) statusText = "Идёт сейчас";
-          else if (isPast) statusText = "Завершена ✓";
+          else if (isPast) statusText = "Завершена";
           else if (isToday) statusText = "Скоро";
 
           slotsHtml.push(`
@@ -2152,7 +2220,7 @@
               <div class="timeline-body">
                 <div class="timeline-row">
                   <span class="slot-name">${idx + 1}-я пара</span>
-                  <span class="slot-time">${s.time}</span>
+                  <span class="slot-time">${s.time.replace(' - ', '–')}</span>
                   ${statusText ? `<span class="slot-status">${statusText}</span>` : ""}
                 </div>
               </div>
@@ -2172,13 +2240,13 @@
             slotsHtml.push(`
               <div class="timeline-break ${isBreakNow ? 'break-active' : ''}">
                 <div class="timeline-bullet">
-                  <span class="break-ico">☕</span>
+                  <span class="break-line"></span>
                 </div>
                 <div class="break-body">
                   <div class="break-pill-inner">
                     ${isBreakNow
-                      ? `Сейчас перемена • до 2-й пары ${formatMinutes(breakRem)}`
-                      : `Перемена ${breakDuration} минут (${s.time.split(' - ')[1]} — ${nextS.time.split(' - ')[0]})`
+                      ? `Сейчас перемена • до ${idx + 2}-й пары ${formatMinutes(breakRem)}`
+                      : `Перемена ${breakDuration} мин · ${s.time.split(' - ')[1]}–${nextS.time.split(' - ')[0]}`
                     }
                   </div>
                 </div>
@@ -2223,7 +2291,7 @@
             ${g.link ? `
               <a href="${g.link}" target="_blank" rel="noopener noreferrer" class="btn-mts">
                 <svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
-                <span>Подключиться к занятию (МТС Линк)</span>
+                <span>Подключиться в МТС Линк</span>
               </a>
             ` : ""}
           </div>
@@ -2616,7 +2684,7 @@
         const perm = await Notification.requestPermission();
         if (perm === "granted") {
           localStorage.setItem("ranepa_push_enabled", "true");
-          showToast("🔔 Уведомления успешно включены!");
+          showToast("Уведомления успешно включены!");
           new Notification("🔔 Напоминания включены!", {
             body: "Вы получите уведомление за 15 минут до начала пары.",
             icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>"
@@ -2741,7 +2809,7 @@
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
 
-      showToast("📅 Файл расписания скачан! Откройте его на телефоне");
+      showToast("Файл расписания скачан! Откройте его на телефоне");
     });
 
     // ==========================================
@@ -2885,7 +2953,7 @@
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        showToast("📅 Нажми «Добавить», чтобы телефон зазвенел в установленное время!");
+        showToast("Нажми «Добавить», чтобы телефон зазвенел в установленное время!");
       } catch(e) {
         showToast("⚠️ Ошибка экспорта в календарь");
       }
@@ -2927,7 +2995,7 @@
         
         let timeBadgeHtml = "";
         if (n.remindAt) {
-          const badgeText = n.reminded ? "✓ Напомнено" : `<svg class="svg-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> ${formatRemindBadge(n.remindAt)}`;
+          const badgeText = n.reminded ? "Напомнено" : `<svg class="svg-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> ${formatRemindBadge(n.remindAt)}`;
           const badgeClass = n.reminded ? "note-time-badge fired" : "note-time-badge";
           timeBadgeHtml = `
             <div style="display:flex; align-items:center; flex-wrap:wrap;">
@@ -2941,12 +3009,12 @@
         }
 
         item.innerHTML = `
-          <div class="note-checkbox">${n.done ? "✓" : ""}</div>
+          <div class="note-checkbox">${n.done ? `<svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>` : ""}</div>
           <div class="note-content">
             <div class="note-text">${n.text}</div>
             ${timeBadgeHtml}
           </div>
-          <button class="btn-del-note" title="Удалить">✕</button>
+          <button class="btn-del-note" title="Удалить" aria-label="Удалить"><svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
         `;
 
         const calBtn = item.querySelector(".btn-note-cal");
@@ -3010,7 +3078,7 @@
       timeInp.value = "";
       document.querySelectorAll(".quick-pill").forEach(b => b.classList.remove("selected"));
       renderNotes();
-      showToast(remindAt ? "✅ Заметка с напоминанием сохранена!" : "✅ Заметка сохранена!");
+      showToast(remindAt ? "Заметка с напоминанием сохранена" : "Заметка сохранена");
     }
 
     // Проверка напоминаний по заметкам каждые 10 секунд
