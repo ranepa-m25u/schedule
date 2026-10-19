@@ -202,6 +202,24 @@
       display: flex;
     }
 
+    .live-banner.break-mode {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(229, 57, 53, 0.08));
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    .live-banner.break-mode .live-dot {
+      background: #f59e0b;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+    }
+
+    .live-banner.break-mode .live-badge {
+      color: #d97706;
+    }
+
+    [data-theme="dark"] .live-banner.break-mode .live-badge {
+      color: #fbbf24;
+    }
+
     .live-banner-info {
       flex: 1;
     }
@@ -585,6 +603,68 @@
     .btn-mts:active {
       transform: scale(0.98);
       box-shadow: 0 2px 8px rgba(227, 6, 17, 0.4);
+    }
+
+    .lesson-card.is-past {
+      opacity: 0.65;
+    }
+
+    /* Разделитель перемены между парами */
+    .break-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: var(--chip-bg);
+      border: 1px dashed var(--line);
+      border-radius: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.25s ease;
+      margin: 2px 0;
+    }
+
+    .break-divider.active {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.16), rgba(229, 57, 53, 0.12));
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #b45309;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15);
+      animation: break-pulse 2s infinite ease-in-out;
+    }
+
+    [data-theme="dark"] .break-divider.active {
+      color: #fbbf24;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(255, 82, 82, 0.16));
+      border-color: rgba(245, 158, 11, 0.5);
+    }
+
+    @keyframes break-pulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15);
+      }
+      50% {
+        transform: scale(1.01);
+        box-shadow: 0 6px 18px rgba(245, 158, 11, 0.25);
+      }
+    }
+
+    .break-divider .break-icon {
+      font-size: 16px;
+      display: inline-block;
+    }
+
+    .break-divider.active .break-icon {
+      animation: break-bounce 1s infinite alternate ease-in-out;
+    }
+
+    @keyframes break-bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-2px) scale(1.1); }
     }
 
     /* Карусель расписания с отслеживанием пальца 1:1 */
@@ -1465,13 +1545,39 @@
   <script>
     // Встроенные данные расписания группы М25-У (РАНХиГС)
     const SCHEDULE = {
+      "2026-10-17": {
+        "day_name": "Суббота",
+        "lessons": [
+          {
+            "time": "08:30 - 09:50",
+            "subject": "Логистика внешнеторговых операций",
+            "type": "Лекция (1-я пара)",
+            "teacher": "Швырев Роман Валентинович",
+            "link": "https://my.mts-link.ru/event/1817301461/1036887935"
+          },
+          {
+            "time": "10:00 - 11:20",
+            "subject": "Логистика внешнеторговых операций",
+            "type": "Практическое занятие (2-я пара)",
+            "teacher": "Швырев Роман Валентинович",
+            "link": "https://my.mts-link.ru/event/1817301461/1036887935"
+          }
+        ]
+      },
       "2026-10-20": {
         "day_name": "Вторник",
         "lessons": [
           {
             "time": "17:50 - 19:10",
             "subject": "Общий менеджмент",
-            "type": "Практическое занятие",
+            "type": "Практическое занятие (1-я пара)",
+            "teacher": "Чаусова Людмила Александровна",
+            "link": "https://my.mts-link.ru/j/Ranepa/142463420"
+          },
+          {
+            "time": "19:20 - 20:40",
+            "subject": "Общий менеджмент",
+            "type": "Практическое занятие (2-я пара)",
             "teacher": "Чаусова Людмила Александровна",
             "link": "https://my.mts-link.ru/j/Ranepa/142463420"
           }
@@ -1483,7 +1589,14 @@
           {
             "time": "17:50 - 19:10",
             "subject": "Иностранный язык (для имеющих навыки)",
-            "type": "Практическое занятие",
+            "type": "Практическое занятие (1-я пара)",
+            "teacher": "Зельникова Яна Игоревна",
+            "link": "https://ranepa.mts-link.ru/j/Ranepa/148785347"
+          },
+          {
+            "time": "19:20 - 20:40",
+            "subject": "Иностранный язык (для имеющих навыки)",
+            "type": "Практическое занятие (2-я пара)",
             "teacher": "Зельникова Яна Игоревна",
             "link": "https://ranepa.mts-link.ru/j/Ranepa/148785347"
           }
@@ -1495,7 +1608,14 @@
           {
             "time": "17:50 - 19:10",
             "subject": "Общий менеджмент",
-            "type": "Практическое занятие",
+            "type": "Практическое занятие (1-я пара)",
+            "teacher": "Чаусова Людмила Александровна",
+            "link": "https://my.mts-link.ru/j/Ranepa/142463420"
+          },
+          {
+            "time": "19:20 - 20:40",
+            "subject": "Общий менеджмент",
+            "type": "Практическое занятие (2-я пара)",
             "teacher": "Чаусова Людмила Александровна",
             "link": "https://my.mts-link.ru/j/Ranepa/142463420"
           }
@@ -1507,7 +1627,14 @@
           {
             "time": "08:30 - 09:50",
             "subject": "Логистика внешнеторговых операций",
-            "type": "Практическое занятие",
+            "type": "Практическое занятие (1-я пара)",
+            "teacher": "Швырев Роман Валентинович",
+            "link": "https://my.mts-link.ru/event/1817301461/1036887935"
+          },
+          {
+            "time": "10:00 - 11:20",
+            "subject": "Логистика внешнеторговых операций",
+            "type": "Практическое занятие (2-я пара)",
             "teacher": "Швырев Роман Валентинович",
             "link": "https://my.mts-link.ru/event/1817301461/1036887935"
           }
@@ -1519,7 +1646,14 @@
           {
             "time": "17:50 - 19:10",
             "subject": "Экологический менеджмент",
-            "type": "Лекция / Практическое занятие",
+            "type": "Лекция / Практическое занятие (1-я пара)",
+            "teacher": "Антохина Варвара Анатольевна",
+            "link": "https://ranepa.mts-link.ru/j/107725991/107487372/stream-new/823384798"
+          },
+          {
+            "time": "19:20 - 20:40",
+            "subject": "Экологический менеджмент",
+            "type": "Лекция / Практическое занятие (2-я пара)",
             "teacher": "Антохина Варвара Анатольевна",
             "link": "https://ranepa.mts-link.ru/j/107725991/107487372/stream-new/823384798"
           }
@@ -1531,7 +1665,14 @@
           {
             "time": "17:50 - 19:10",
             "subject": "Иностранный язык (для начинающих)",
-            "type": "Практическое занятие",
+            "type": "Практическое занятие (1-я пара)",
+            "teacher": "Зельникова Яна Игоревна",
+            "link": "https://ranepa.mts-link.ru/j/Ranepa/148785347"
+          },
+          {
+            "time": "19:20 - 20:40",
+            "subject": "Иностранный язык (для начинающих)",
+            "type": "Практическое занятие (2-я пара)",
             "teacher": "Зельникова Яна Игоревна",
             "link": "https://ranepa.mts-link.ru/j/Ranepa/148785347"
           }
@@ -1543,7 +1684,14 @@
           {
             "time": "17:50 - 19:10",
             "subject": "Философия",
-            "type": "Практическое занятие",
+            "type": "Практическое занятие (1-я пара)",
+            "teacher": "Майорова Наталья Олеговна",
+            "link": "https://ranepa.mts-link.ru/j/Ranepa/2030069958"
+          },
+          {
+            "time": "19:20 - 20:40",
+            "subject": "Философия",
+            "type": "Практическое занятие (2-я пара)",
             "teacher": "Майорова Наталья Олеговна",
             "link": "https://ranepa.mts-link.ru/j/Ranepa/2030069958"
           }
@@ -1555,7 +1703,14 @@
           {
             "time": "08:30 - 09:50",
             "subject": "Налоги и налогообложение",
-            "type": "Практическое занятие",
+            "type": "Практическое занятие (1-я пара)",
+            "teacher": "Солярик Марина Анатольевна",
+            "link": "https://ranepa.mts-link.ru/j/94657031/1764078116/stream-new/721207890"
+          },
+          {
+            "time": "10:00 - 11:20",
+            "subject": "Налоги и налогообложение",
+            "type": "Практическое занятие (2-я пара)",
             "teacher": "Солярик Марина Анатольевна",
             "link": "https://ranepa.mts-link.ru/j/94657031/1764078116/stream-new/721207890"
           }
@@ -1608,31 +1763,44 @@
       setTimeout(() => toast.classList.remove("show"), 2600);
     }
 
-    // Проверка текущей пары в реальном времени (МТС Линк)
+    // Склонение минут для русского языка (1 минута, 2 минуты, 5 минут)
+    function formatMinutes(min) {
+      const abs = Math.abs(min) % 100;
+      const rem = abs % 10;
+      if (abs > 10 && abs < 20) return `${min} минут`;
+      if (rem > 1 && rem < 5) return `${min} минуты`;
+      if (rem === 1) return `${min} минута`;
+      return `${min} минут`;
+    }
+
+    // Проверка текущей пары и перемены в реальном времени (МТС Линк)
     function updateLiveBanner() {
       const banner = document.getElementById("liveBanner");
       const todayKey = formatDateKey(new Date());
       const dayData = SCHEDULE[todayKey];
-      if (!dayData || !dayData.lessons) {
+      if (!dayData || !dayData.lessons || dayData.lessons.length === 0) {
         banner.style.display = "none";
         banner.classList.remove("active");
+        banner.classList.remove("break-mode");
         return;
       }
 
       const now = new Date();
       const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
-      for (const lesson of dayData.lessons) {
+      // 1. Проверяем: идет ли пара прямо сейчас
+      for (let i = 0; i < dayData.lessons.length; i++) {
+        const lesson = dayData.lessons[i];
         const [startStr, endStr] = lesson.time.split(" - ");
         const [sh, sm] = startStr.split(":").map(Number);
         const [eh, em] = endStr.split(":").map(Number);
         const startMin = sh * 60 + sm;
         const endMin = eh * 60 + em;
 
-        // Идет прямо сейчас
-        if (nowMinutes >= startMin && nowMinutes <= endMin) {
+        if (nowMinutes >= startMin && nowMinutes < endMin) {
           banner.style.display = "flex";
           banner.classList.add("active");
+          banner.classList.remove("break-mode");
           document.getElementById("liveStatusText").textContent = "Идёт прямо сейчас";
           document.getElementById("liveSubjectText").textContent = `${lesson.subject} (${lesson.time})`;
           const btn = document.getElementById("liveJoinBtn");
@@ -1644,23 +1812,53 @@
           return;
         }
 
-        // Начнется меньше чем через 30 минут
-        if (startMin > nowMinutes && startMin - nowMinutes <= 30) {
-          banner.style.display = "flex";
-          banner.classList.add("active");
-          document.getElementById("liveStatusText").textContent = `Начнётся через ${startMin - nowMinutes} мин`;
-          document.getElementById("liveSubjectText").textContent = `${lesson.subject} (в ${startStr})`;
-          const btn = document.getElementById("liveJoinBtn");
-          btn.href = lesson.link || "#";
-          btn.innerHTML = `
-            <svg class="svg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
-            <span>В вебинар ➔</span>
-          `;
-          return;
+        // 2. Проверяем: идет ли перемена между парами
+        if (i < dayData.lessons.length - 1) {
+          const nextLesson = dayData.lessons[i + 1];
+          const [nsh, nsm] = nextLesson.time.split(" - ")[0].split(":").map(Number);
+          const nextStartMin = nsh * 60 + nsm;
+
+          if (nowMinutes >= endMin && nowMinutes < nextStartMin) {
+            const diff = nextStartMin - nowMinutes;
+            banner.style.display = "flex";
+            banner.classList.add("active");
+            banner.classList.add("break-mode");
+            document.getElementById("liveStatusText").textContent = "Сейчас перемена ☕";
+            document.getElementById("liveSubjectText").textContent = `Следующая пара начнется через ${formatMinutes(diff)} • ${nextLesson.subject}`;
+            const btn = document.getElementById("liveJoinBtn");
+            btn.href = nextLesson.link || "#";
+            btn.innerHTML = `
+              <svg class="svg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
+              <span>К следующей паре ➔</span>
+            `;
+            return;
+          }
         }
       }
+
+      // 3. Проверяем: начнется ли первая пара дня меньше чем через 30 минут
+      const firstLesson = dayData.lessons[0];
+      const [fsh, fsm] = firstLesson.time.split(" - ")[0].split(":").map(Number);
+      const firstStartMin = fsh * 60 + fsm;
+      if (firstStartMin > nowMinutes && firstStartMin - nowMinutes <= 30) {
+        const diff = firstStartMin - nowMinutes;
+        banner.style.display = "flex";
+        banner.classList.add("active");
+        banner.classList.remove("break-mode");
+        document.getElementById("liveStatusText").textContent = `Начнётся через ${formatMinutes(diff)}`;
+        document.getElementById("liveSubjectText").textContent = `${firstLesson.subject} (в ${firstLesson.time.split(" - ")[0]})`;
+        const btn = document.getElementById("liveJoinBtn");
+        btn.href = firstLesson.link || "#";
+        btn.innerHTML = `
+          <svg class="svg-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
+          <span>В вебинар ➔</span>
+        `;
+        return;
+      }
+
       banner.style.display = "none";
       banner.classList.remove("active");
+      banner.classList.remove("break-mode");
     }
 
     // Расчет ближайшей будущей пары и обратного отсчета
@@ -1671,24 +1869,49 @@
       const now = new Date();
       let nextLesson = null;
       let nextDateKey = null;
+      let isBreakNow = false;
+      let breakDiffMin = 0;
 
-      for (const dKey of availableDates) {
-        const [y, m, d] = dKey.split("-").map(Number);
-        const dayInfo = SCHEDULE[dKey];
-        if (!dayInfo || !dayInfo.lessons) continue;
+      const todayKey = formatDateKey(now);
+      const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
-        for (const lesson of dayInfo.lessons) {
-          const [sh, sm] = lesson.time.split(" - ")[0].split(":").map(Number);
-          const [eh, em] = lesson.time.split(" - ")[1].split(":").map(Number);
-          const lessonEndDate = new Date(y, m - 1, d, eh, em, 0);
-
-          if (lessonEndDate > now) {
-            nextLesson = lesson;
-            nextDateKey = dKey;
+      // Проверяем, идет ли перемена прямо сейчас сегодня
+      if (SCHEDULE[todayKey] && SCHEDULE[todayKey].lessons) {
+        const tLessons = SCHEDULE[todayKey].lessons;
+        for (let i = 0; i < tLessons.length - 1; i++) {
+          const [eh, em] = tLessons[i].time.split(" - ")[1].split(":").map(Number);
+          const [nsh, nsm] = tLessons[i + 1].time.split(" - ")[0].split(":").map(Number);
+          const endMin = eh * 60 + em;
+          const nextStartMin = nsh * 60 + nsm;
+          if (nowMinutes >= endMin && nowMinutes < nextStartMin) {
+            isBreakNow = true;
+            breakDiffMin = nextStartMin - nowMinutes;
+            nextLesson = tLessons[i + 1];
+            nextDateKey = todayKey;
             break;
           }
         }
-        if (nextLesson) break;
+      }
+
+      if (!isBreakNow) {
+        for (const dKey of availableDates) {
+          const [y, m, d] = dKey.split("-").map(Number);
+          const dayInfo = SCHEDULE[dKey];
+          if (!dayInfo || !dayInfo.lessons) continue;
+
+          for (const lesson of dayInfo.lessons) {
+            const [sh, sm] = lesson.time.split(" - ")[0].split(":").map(Number);
+            const [eh, em] = lesson.time.split(" - ")[1].split(":").map(Number);
+            const lessonEndDate = new Date(y, m - 1, d, eh, em, 0);
+
+            if (lessonEndDate > now) {
+              nextLesson = lesson;
+              nextDateKey = dKey;
+              break;
+            }
+          }
+          if (nextLesson) break;
+        }
       }
 
       if (!nextLesson) {
@@ -1704,20 +1927,28 @@
       const diffMs = lessonStartDate - now;
       let timerStr = "";
 
-      if (diffMs <= 0) {
-        timerStr = "Идёт сейчас";
-      } else {
-        const diffMin = Math.floor(diffMs / 60000);
-        const days = Math.floor(diffMin / (60 * 24));
-        const hours = Math.floor((diffMin % (60 * 24)) / 60);
-        const mins = diffMin % 60;
+      const countdownBadgeSpan = card.querySelector(".countdown-badge span");
 
-        if (days > 0) {
-          timerStr = `через ${days} дн. ${hours} ч.`;
-        } else if (hours > 0) {
-          timerStr = `через ${hours} ч. ${mins} мин.`;
+      if (isBreakNow) {
+        if (countdownBadgeSpan) countdownBadgeSpan.textContent = "Сейчас перемена ☕";
+        timerStr = `через ${formatMinutes(breakDiffMin)}`;
+      } else {
+        if (countdownBadgeSpan) countdownBadgeSpan.textContent = "Ближайшая пара";
+        if (diffMs <= 0) {
+          timerStr = "Идёт сейчас";
         } else {
-          timerStr = `через ${mins} мин.`;
+          const diffMin = Math.floor(diffMs / 60000);
+          const days = Math.floor(diffMin / (60 * 24));
+          const hours = Math.floor((diffMin % (60 * 24)) / 60);
+          const mins = diffMin % 60;
+
+          if (days > 0) {
+            timerStr = `через ${days} дн. ${hours} ч.`;
+          } else if (hours > 0) {
+            timerStr = `через ${hours} ч. ${mins} мин.`;
+          } else {
+            timerStr = `через ${mins} мин.`;
+          }
         }
       }
 
@@ -1758,26 +1989,76 @@
         `;
       }
 
-      return dayInfo.lessons.map(l => `
-        <div class="lesson-card">
-          <div class="lesson-header">
-            <span class="lesson-time">
-              <svg class="svg-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              <span>${l.time}</span>
-            </span>
-            <span class="lesson-type">${l.type || "Занятие"}</span>
+      const isToday = (dateKey === formatDateKey(new Date()));
+      const now = new Date();
+      const nowMin = now.getHours() * 60 + now.getMinutes();
+
+      let html = "";
+      for (let i = 0; i < dayInfo.lessons.length; i++) {
+        const l = dayInfo.lessons[i];
+        const [startStr, endStr] = l.time.split(" - ");
+        const [sh, sm] = startStr.split(":").map(Number);
+        const [eh, em] = endStr.split(":").map(Number);
+        const startMin = sh * 60 + sm;
+        const endMin = eh * 60 + em;
+
+        const isCurrent = isToday && (nowMin >= startMin && nowMin < endMin);
+        const isPast = isToday && (nowMin >= endMin);
+
+        html += `
+          <div class="lesson-card ${isCurrent ? 'is-now' : ''} ${isPast ? 'is-past' : ''}">
+            ${isCurrent ? `
+              <div class="now-indicator">
+                <span class="live-dot"></span>
+                <span>ИДЁТ СЕЙЧАС</span>
+              </div>
+            ` : ""}
+            <div class="lesson-header">
+              <span class="lesson-time">
+                <svg class="svg-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>${l.time}</span>
+              </span>
+              <span class="lesson-type">${l.type || "Занятие"}</span>
+            </div>
+            <div class="lesson-title">${l.subject}</div>
+            <div class="lesson-teacher">
+              <svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>${l.teacher || "Преподаватель не указан"}</span>
+            </div>
+            ${l.link ? `<a href="${l.link}" target="_blank" rel="noopener noreferrer" class="btn-mts">
+              <svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
+              <span>Подключиться к занятию (МТС Линк)</span>
+            </a>` : ""}
           </div>
-          <div class="lesson-title">${l.subject}</div>
-          <div class="lesson-teacher">
-            <svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <span>${l.teacher || "Преподаватель не указан"}</span>
-          </div>
-          ${l.link ? `<a href="${l.link}" target="_blank" rel="noopener noreferrer" class="btn-mts">
-            <svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
-            <span>Подключиться к занятию (МТС Линк)</span>
-          </a>` : ""}
-        </div>
-      `).join("");
+        `;
+
+        // Разделитель перемены между парами
+        if (i < dayInfo.lessons.length - 1) {
+          const nextL = dayInfo.lessons[i + 1];
+          const [nsh, nsm] = nextL.time.split(" - ")[0].split(":").map(Number);
+          const nextStartMin = nsh * 60 + nsm;
+          const breakMin = nextStartMin - endMin;
+
+          if (breakMin > 0) {
+            const isBreakNow = isToday && (nowMin >= endMin && nowMin < nextStartMin);
+            const remainingBreak = nextStartMin - nowMin;
+
+            html += `
+              <div class="break-divider ${isBreakNow ? 'active' : ''}">
+                <span class="break-icon">☕</span>
+                <span class="break-text">
+                  ${isBreakNow
+                    ? `Сейчас перемена, следующая пара начнется через ${formatMinutes(remainingBreak)}`
+                    : `Перемена ${breakMin} минут (${endStr} — ${nextL.time.split(' - ')[0]})`
+                  }
+                </span>
+              </div>
+            `;
+          }
+        }
+      }
+
+      return html;
     }
 
     function updateDayHeaders(d) {
@@ -2051,22 +2332,38 @@
         dayDivider.textContent = `🗓 ${d.getDate()} ${MONTH_NAMES[d.getMonth()]} (${dayInfo.day_name}):`;
         container.appendChild(dayDivider);
 
-        dayInfo.lessons.forEach(l => {
+        dayInfo.lessons.forEach((l, idx) => {
           const card = document.createElement("div");
           card.className = "lesson-card";
           card.innerHTML = `
             <div class="lesson-header">
-              <span class="lesson-time">⏰ ${l.time}</span>
+              <span class="lesson-time">
+                <svg class="svg-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>${l.time}</span>
+              </span>
               <span class="lesson-type">${l.type || ""}</span>
             </div>
             <div class="lesson-title">${l.subject}</div>
-            <div class="lesson-teacher">👤 ${l.teacher}</div>
+            <div class="lesson-teacher">
+              <svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>${l.teacher}</span>
+            </div>
             ${l.link ? `<a href="${l.link}" target="_blank" rel="noopener noreferrer" class="btn-mts">
-              <span>📹</span>
+              <svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
               <span>Подключиться к занятию (МТС Линк)</span>
             </a>` : ""}
           `;
           container.appendChild(card);
+
+          if (idx < dayInfo.lessons.length - 1) {
+            const nextL = dayInfo.lessons[idx + 1];
+            const endStr = l.time.split(" - ")[1];
+            const nextStartStr = nextL.time.split(" - ")[0];
+            const brk = document.createElement("div");
+            brk.className = "break-divider";
+            brk.innerHTML = `<span class="break-icon">☕</span><span>Перемена 10 минут (${endStr} — ${nextStartStr})</span>`;
+            container.appendChild(brk);
+          }
         });
       });
     }
@@ -2235,9 +2532,14 @@
       });
     }
 
-    setInterval(checkUpcomingLessonPush, 30000);
-    setInterval(updateLiveBanner, 30000);
-    setInterval(updateNextLessonCountdown, 30000);
+    setInterval(checkUpcomingLessonPush, 15000);
+    setInterval(() => {
+      updateLiveBanner();
+      updateNextLessonCountdown();
+      if (selectedDateKey === formatDateKey(new Date())) {
+        updateSliderSlides();
+      }
+    }, 10000);
 
     // ==========================================
     // ГЕНЕРАТОР КАЛЕНДАРЯ (.ICS) НА ТЕЛЕФОН
