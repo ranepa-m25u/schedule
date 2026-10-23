@@ -1499,8 +1499,20 @@
     .date-weekday{font-size:20px;font-weight:700;margin:0;letter-spacing:-.2px}
     .nav-date-text{font-size:13px;font-weight:500;color:var(--muted)}
     .countdown-card{box-shadow:none}
+    /* Плавное сворачивание карточки (вместо резкого display:none), чтобы контент под ней не прыгал */
+    .countdown-card{transition:padding .3s cubic-bezier(.25,1,.35,1),background-color .25s ease,border-color .25s ease}
     .countdown-card.compact{padding:10px 14px}
-    .countdown-card.compact .countdown-subject,.countdown-card.compact .countdown-meta,.countdown-card.compact .countdown-goto-btn{display:none}
+    .countdown-right{gap:0}
+    .countdown-subject,.countdown-meta,.countdown-goto-btn{
+      overflow:hidden;
+      transition:max-height .3s cubic-bezier(.25,1,.35,1),opacity .2s ease,margin .3s cubic-bezier(.25,1,.35,1),padding .3s cubic-bezier(.25,1,.35,1),border-width .3s ease
+    }
+    .countdown-subject{max-height:24px}
+    .countdown-meta{max-height:20px}
+    .countdown-goto-btn{max-height:30px;margin-top:6px}
+    .countdown-card.compact .countdown-subject,.countdown-card.compact .countdown-meta,.countdown-card.compact .countdown-goto-btn{
+      max-height:0;opacity:0;margin-top:0;padding-top:0;padding-bottom:0;border-width:0
+    }
     .countdown-card.compact .countdown-right{align-items:center}
     .countdown-badge,.session-badge,.live-badge{text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:600}
     .countdown-subject{font-weight:700}
@@ -1899,7 +1911,7 @@
     }
 
     // Расчет ближайшей будущей пары и обратного отсчета
-    function updateNextLessonCountdown() {
+    function updateNextLessonCountdown(viewKey = selectedDateKey) {
       const card = document.getElementById("nextLessonCard");
       if (!card) return;
 
@@ -1957,7 +1969,7 @@
       }
 
       card.style.display = "flex";
-      card.classList.toggle("compact", nextDateKey === selectedDateKey);
+      card.classList.toggle("compact", nextDateKey === viewKey);
       const [y, m, d] = nextDateKey.split("-").map(Number);
       const [sh, sm] = nextLesson.time.split(" - ")[0].split(":").map(Number);
       const lessonStartDate = new Date(y, m - 1, d, sh, sm, 0);
@@ -2251,6 +2263,7 @@
       const targetDate = new Date(currentDate);
       targetDate.setDate(targetDate.getDate() + 1);
       updateDayHeaders(targetDate, 1);
+      updateNextLessonCountdown(formatDateKey(targetDate));
 
       slideNext.style.height = 'auto';
       slideNext.style.overflow = 'visible';
@@ -2274,6 +2287,7 @@
       const targetDate = new Date(currentDate);
       targetDate.setDate(targetDate.getDate() - 1);
       updateDayHeaders(targetDate, -1);
+      updateNextLessonCountdown(formatDateKey(targetDate));
 
       slidePrev.style.height = 'auto';
       slidePrev.style.overflow = 'visible';

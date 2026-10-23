@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ranepa-m25u-v22';
+const CACHE_NAME = 'ranepa-m25u-v23';
 
 const PRECACHE = [
   './',
