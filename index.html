@@ -1695,9 +1695,11 @@
 
   <!-- Модальное окно календаря -->
   <div class="modal-overlay" id="calendarModal">
-    <div class="modal-card">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-label="Календарь">
       <div class="modal-head">
-        <div class="modal-head-title" id="calMonthTitle">Октябрь 2026</div>
+        <button class="btn-icon" id="calPrevMonth" style="width:32px;height:32px;" aria-label="Предыдущий месяц"><svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+        <div class="modal-head-title" id="calMonthTitle" style="flex:1;text-align:center;">Октябрь 2026</div>
+        <button class="btn-icon" id="calNextMonth" style="width:32px;height:32px;margin-right:8px;" aria-label="Следующий месяц"><svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
         <button class="btn-icon" id="closeCalModal" style="width:32px;height:32px;font-size:14px;" aria-label="Закрыть"><svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="cal-weekdays">
@@ -1709,7 +1711,7 @@
 
   <!-- Модальное окно уведомлений и календаря -->
   <div class="modal-overlay" id="notifModal">
-    <div class="modal-card">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-label="Напоминания">
       <div class="modal-head">
         <div class="modal-head-title">Напоминания</div>
         <button class="btn-icon" id="closeNotifModal" style="width:32px;height:32px;font-size:14px;" aria-label="Закрыть"><svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
@@ -1743,186 +1745,21 @@
   </div>
 
   <script>
-    // Встроенные данные расписания группы М25-У (РАНХиГС)
-    const SCHEDULE = {
-      "2026-10-17": {
-        "day_name": "Суббота",
-        "lessons": [
-          {
-            "time": "08:30 - 09:50",
-            "subject": "Логистика внешнеторговых операций",
-            "type": "Лекция (1-я пара)",
-            "teacher": "Швырев Роман Валентинович",
-            "link": "https://my.mts-link.ru/event/1817301461/1036887935"
-          },
-          {
-            "time": "10:00 - 11:20",
-            "subject": "Логистика внешнеторговых операций",
-            "type": "Практическое занятие (2-я пара)",
-            "teacher": "Швырев Роман Валентинович",
-            "link": "https://my.mts-link.ru/event/1817301461/1036887935"
-          }
-        ]
-      },
-      "2026-10-20": {
-        "day_name": "Вторник",
-        "lessons": [
-          {
-            "time": "17:50 - 19:10",
-            "subject": "Общий менеджмент",
-            "type": "Практическое занятие (1-я пара)",
-            "teacher": "Чаусова Людмила Александровна",
-            "link": "https://my.mts-link.ru/j/Ranepa/142463420"
-          },
-          {
-            "time": "19:20 - 20:40",
-            "subject": "Общий менеджмент",
-            "type": "Практическое занятие (2-я пара)",
-            "teacher": "Чаусова Людмила Александровна",
-            "link": "https://my.mts-link.ru/j/Ranepa/142463420"
-          }
-        ]
-      },
-      "2026-10-21": {
-        "day_name": "Среда",
-        "lessons": [
-          {
-            "time": "17:50 - 19:10",
-            "subject": "Иностранный язык (для имеющих навыки)",
-            "type": "Практическое занятие (1-я пара)",
-            "teacher": "Зельникова Яна Игоревна",
-            "link": "https://ranepa.mts-link.ru/j/Ranepa/148785347"
-          },
-          {
-            "time": "19:20 - 20:40",
-            "subject": "Иностранный язык (для имеющих навыки)",
-            "type": "Практическое занятие (2-я пара)",
-            "teacher": "Зельникова Яна Игоревна",
-            "link": "https://ranepa.mts-link.ru/j/Ranepa/148785347"
-          }
-        ]
-      },
-      "2026-10-22": {
-        "day_name": "Четверг",
-        "lessons": [
-          {
-            "time": "17:50 - 19:10",
-            "subject": "Общий менеджмент",
-            "type": "Практическое занятие (1-я пара)",
-            "teacher": "Чаусова Людмила Александровна",
-            "link": "https://my.mts-link.ru/j/Ranepa/142463420"
-          },
-          {
-            "time": "19:20 - 20:40",
-            "subject": "Общий менеджмент",
-            "type": "Практическое занятие (2-я пара)",
-            "teacher": "Чаусова Людмила Александровна",
-            "link": "https://my.mts-link.ru/j/Ranepa/142463420"
-          }
-        ]
-      },
-      "2026-10-24": {
-        "day_name": "Суббота",
-        "lessons": [
-          {
-            "time": "08:30 - 09:50",
-            "subject": "Логистика внешнеторговых операций",
-            "type": "Практическое занятие (1-я пара)",
-            "teacher": "Швырев Роман Валентинович",
-            "link": "https://my.mts-link.ru/event/1817301461/1036887935"
-          },
-          {
-            "time": "10:00 - 11:20",
-            "subject": "Логистика внешнеторговых операций",
-            "type": "Практическое занятие (2-я пара)",
-            "teacher": "Швырев Роман Валентинович",
-            "link": "https://my.mts-link.ru/event/1817301461/1036887935"
-          }
-        ]
-      },
-      "2026-10-27": {
-        "day_name": "Вторник",
-        "lessons": [
-          {
-            "time": "17:50 - 19:10",
-            "subject": "Экологический менеджмент",
-            "type": "Лекция / Практическое занятие (1-я пара)",
-            "teacher": "Антохина Варвара Анатольевна",
-            "link": "https://ranepa.mts-link.ru/j/107725991/107487372/stream-new/823384798"
-          },
-          {
-            "time": "19:20 - 20:40",
-            "subject": "Экологический менеджмент",
-            "type": "Лекция / Практическое занятие (2-я пара)",
-            "teacher": "Антохина Варвара Анатольевна",
-            "link": "https://ranepa.mts-link.ru/j/107725991/107487372/stream-new/823384798"
-          }
-        ]
-      },
-      "2026-10-28": {
-        "day_name": "Среда",
-        "lessons": [
-          {
-            "time": "17:50 - 19:10",
-            "subject": "Иностранный язык (для начинающих)",
-            "type": "Практическое занятие (1-я пара)",
-            "teacher": "Зельникова Яна Игоревна",
-            "link": "https://ranepa.mts-link.ru/j/Ranepa/148785347"
-          },
-          {
-            "time": "19:20 - 20:40",
-            "subject": "Иностранный язык (для начинающих)",
-            "type": "Практическое занятие (2-я пара)",
-            "teacher": "Зельникова Яна Игоревна",
-            "link": "https://ranepa.mts-link.ru/j/Ranepa/148785347"
-          }
-        ]
-      },
-      "2026-10-29": {
-        "day_name": "Четверг",
-        "lessons": [
-          {
-            "time": "17:50 - 19:10",
-            "subject": "Философия",
-            "type": "Практическое занятие (1-я пара)",
-            "teacher": "Майорова Наталья Олеговна",
-            "link": "https://ranepa.mts-link.ru/j/Ranepa/2030069958"
-          },
-          {
-            "time": "19:20 - 20:40",
-            "subject": "Философия",
-            "type": "Практическое занятие (2-я пара)",
-            "teacher": "Майорова Наталья Олеговна",
-            "link": "https://ranepa.mts-link.ru/j/Ranepa/2030069958"
-          }
-        ]
-      },
-      "2026-10-31": {
-        "day_name": "Суббота",
-        "lessons": [
-          {
-            "time": "08:30 - 09:50",
-            "subject": "Налоги и налогообложение",
-            "type": "Практическое занятие (1-я пара)",
-            "teacher": "Солярик Марина Анатольевна",
-            "link": "https://ranepa.mts-link.ru/j/94657031/1764078116/stream-new/721207890"
-          },
-          {
-            "time": "10:00 - 11:20",
-            "subject": "Налоги и налогообложение",
-            "type": "Практическое занятие (2-я пара)",
-            "teacher": "Солярик Марина Анатольевна",
-            "link": "https://ranepa.mts-link.ru/j/94657031/1764078116/stream-new/721207890"
-          }
-        ]
-      }
-    };
+    // Расписание загружается из schedule.json (см. loadSchedule ниже)
+    let SCHEDULE = {};
+    let availableDates = [];
 
     const MONTH_NAMES = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
-    const DAY_NAMES = ["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"];
+    const MONTH_TITLES = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+    const DAY_NAMES =["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"];
 
     let currentDate = new Date();
-    const availableDates = Object.keys(SCHEDULE).sort();
+
+    function escapeHtml(str) {
+      return String(str == null ? "" : str).replace(/[&<>"']/g, ch => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[ch]));
+    }
 
     function formatDateKey(d) {
       const year = d.getFullYear();
@@ -2296,17 +2133,17 @@
         return `
           <div class="session-card ${isAnyNow || activeBreakInGroup ? 'is-now' : ''} ${isAllPast ? 'is-past' : ''}">
             <div class="session-header">
-              <span class="session-badge">${g.type || "Занятие"}</span>
+              <span class="session-badge">${escapeHtml(g.type) || "Занятие"}</span>
               <span class="session-duration">
                 <svg class="svg-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 <span>${g.slots.length > 1 ? `${g.slots.length} пары • ` : ""}${firstStart} – ${lastEnd}</span>
               </span>
             </div>
 
-            <div class="session-title">${g.subject}</div>
+            <div class="session-title">${escapeHtml(g.subject)}</div>
             <div class="session-teacher">
               <svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              <span>${g.teacher || "Преподаватель не указан"}</span>
+              <span>${escapeHtml(g.teacher) || "Преподаватель не указан"}</span>
             </div>
 
             <div class="session-timeline">
@@ -2314,7 +2151,7 @@
             </div>
 
             ${g.link ? `
-              <a href="${g.link}" target="_blank" rel="noopener noreferrer" class="btn-mts">
+              <a href="${escapeHtml(g.link)}" target="_blank" rel="noopener noreferrer" class="btn-mts">
                 <svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect width="14" height="14" x="1" y="5" rx="2" ry="2"/></svg>
                 <span>Подключиться в МТС Линк</span>
               </a>
@@ -2577,40 +2414,29 @@
       }
     });
 
-    function resetActiveChips() {}
-
-    function renderAllSchedule() {
-      const numDateElem = document.getElementById("dateNumericDisplay");
-      if (numDateElem) numDateElem.textContent = "Все дни";
-      const dayNameElem = document.getElementById("dayNameDisplay");
-      if (dayNameElem) dayNameElem.textContent = "Полный список занятий";
-      const navTextElem = document.getElementById("navDateText");
-      if (navTextElem) navTextElem.textContent = "Весь октябрь 2026 г.";
-      const container = document.getElementById("lessonsContainer");
-      container.innerHTML = "";
-
-      availableDates.forEach(dateKey => {
-        const parts = dateKey.split("-");
-        const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
-        const dayInfo = SCHEDULE[dateKey];
-
-        const dayDivider = document.createElement("div");
-        dayDivider.style.cssText = "font-weight:800; font-size:16px; margin: 16px 0 6px; color: var(--accent);";
-        dayDivider.textContent = `🗓 ${d.getDate()} ${MONTH_NAMES[d.getMonth()]} (${dayInfo.day_name}):`;
-        container.appendChild(dayDivider);
-
-        const dayWrapper = document.createElement("div");
-        dayWrapper.style.cssText = "display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px;";
-        dayWrapper.innerHTML = getDayLessonsHTML(dateKey);
-        container.appendChild(dayWrapper);
-      });
-    }
-
     // Модалка календаря
     const calModal = document.getElementById("calendarModal");
+    let calViewDate = new Date();
+
     document.getElementById("dateModalTrigger").addEventListener("click", () => {
-      renderCalendar(currentDate);
+      calViewDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      renderCalendar(calViewDate);
       calModal.classList.add("open");
+    });
+
+    function shiftCalendarMonth(delta) {
+      calViewDate = new Date(calViewDate.getFullYear(), calViewDate.getMonth() + delta, 1);
+      renderCalendar(calViewDate);
+    }
+    document.getElementById("calPrevMonth").addEventListener("click", () => shiftCalendarMonth(-1));
+    document.getElementById("calNextMonth").addEventListener("click", () => shiftCalendarMonth(1));
+
+    // Закрытие модалок по Esc
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        calModal.classList.remove("open");
+        document.getElementById("notifModal").classList.remove("open");
+      }
     });
 
     document.getElementById("closeCalModal").addEventListener("click", () => {
@@ -2624,7 +2450,7 @@
     function renderCalendar(baseDate) {
       const year = baseDate.getFullYear();
       const month = baseDate.getMonth();
-      document.getElementById("calMonthTitle").textContent = `${MONTH_NAMES[month].charAt(0).toUpperCase() + MONTH_NAMES[month].slice(1)} ${year}`;
+      document.getElementById("calMonthTitle").textContent = `${MONTH_TITLES[month]} ${year}`;
 
       const grid = document.getElementById("calGrid");
       grid.innerHTML = "";
@@ -2655,7 +2481,6 @@
         btn.addEventListener("click", () => {
           selectedDateKey = dateStr;
           currentDate = new Date(year, month, day);
-          resetActiveChips();
           renderDay(selectedDateKey, "calendar");
           calModal.classList.remove("open");
         });
@@ -2771,73 +2596,120 @@
     }
 
     setInterval(checkUpcomingLessonPush, 15000);
+    // Раз в 10 секунд обновляем баннер, отсчёт и статусы пар сегодняшнего дня.
+    // Перерисовываем только текущий слайд и не трогаем ленту во время свайпа/анимации.
     setInterval(() => {
       updateLiveBanner();
       updateNextLessonCountdown();
-      if (selectedDateKey === formatDateKey(new Date())) {
-        updateSliderSlides();
+      if (selectedDateKey === formatDateKey(new Date()) && !isSliderAnimating && !isDragging && !isMouseDown) {
+        slideCurrent.innerHTML = `<div class="lessons-container" id="lessonsContainer">${getDayLessonsHTML(selectedDateKey)}</div>`;
       }
     }, 10000);
 
     // ==========================================
     // ГЕНЕРАТОР КАЛЕНДАРЯ (.ICS) НА ТЕЛЕФОН
     // ==========================================
+    const MSK_OFFSET_HOURS = 3; // Москва: UTC+3 без перехода на летнее время
+
+    function icsEscape(text) {
+      return String(text == null ? "" : text)
+        .replace(/\\/g, "\\\\")
+        .replace(/;/g, "\\;")
+        .replace(/,/g, "\\,")
+        .replace(/\r?\n/g, "\\n");
+    }
+
+    // Строки iCalendar не должны превышать 75 байт: длинные переносим (RFC 5545)
+    function icsFold(line) {
+      const enc = new TextEncoder();
+      if (enc.encode(line).length <= 75) return line;
+      const parts = [];
+      let cur = "";
+      let curBytes = 0;
+      let limit = 75;
+      for (const ch of line) {
+        const n = enc.encode(ch).length;
+        if (curBytes + n > limit) {
+          parts.push(cur);
+          cur = "";
+          curBytes = 0;
+          limit = 74; // продолжение начинается с пробела
+        }
+        cur += ch;
+        curBytes += n;
+      }
+      parts.push(cur);
+      return parts.join("\r\n ");
+    }
+
+    function icsUtcStamp(date) {
+      const pad = (n) => String(n).padStart(2, "0");
+      return `${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(date.getUTCDate())}T${pad(date.getUTCHours())}${pad(date.getUTCMinutes())}${pad(date.getUTCSeconds())}Z`;
+    }
+
+    // Время пары по Москве -> момент в UTC
+    function mskToDate(dateStr, timeStr) {
+      const [y, m, d] = dateStr.split("-").map(Number);
+      const [hh, mm] = timeStr.split(":").map(Number);
+      return new Date(Date.UTC(y, m - 1, d, hh - MSK_OFFSET_HOURS, mm, 0));
+    }
+
+    function downloadIcs(lines, filename) {
+      const icsData = lines.map(icsFold).join("\r\n") + "\r\n";
+      const blob = new Blob([icsData], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
     document.getElementById("exportIcsBtn").addEventListener("click", () => {
+      const stamp = icsUtcStamp(new Date());
       const icsLines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
         "PRODID:-//RANEPA//Schedule M25U//RU",
         "CALSCALE:GREGORIAN",
         "METHOD:PUBLISH",
-        "X-WR-CALNAME:Расписание М25-У",
-        "X-WR-TIMEZONE:Europe/Moscow"
+        "X-WR-CALNAME:Расписание М25-У"
       ];
 
       for (const [dateStr, info] of Object.entries(SCHEDULE)) {
-        const [y, m, d] = dateStr.split("-").map(Number);
         for (const l of info.lessons) {
           const [startStr, endStr] = l.time.split(" - ");
-          const [sh, sm] = startStr.split(":").map(Number);
-          const [eh, em] = endStr.split(":").map(Number);
-
-          const dtStart = `${y}${String(m).padStart(2,'0')}${String(d).padStart(2,'0')}T${String(sh).padStart(2,'0')}${String(sm).padStart(2,'0')}00`;
-          const dtEnd = `${y}${String(m).padStart(2,'0')}${String(d).padStart(2,'0')}T${String(eh).padStart(2,'0')}${String(em).padStart(2,'0')}00`;
 
           icsLines.push("BEGIN:VEVENT");
-          icsLines.push(`UID:ranepa-m25u-${dateStr}-${startStr.replace(':','')}@ranepa.ru`);
-          icsLines.push(`DTSTAMP:${dtStart}Z`);
-          icsLines.push(`DTSTART;TZID=Europe/Moscow:${dtStart}`);
-          icsLines.push(`DTEND;TZID=Europe/Moscow:${dtEnd}`);
-          icsLines.push(`SUMMARY:${l.subject}`);
-          icsLines.push(`DESCRIPTION:Преподаватель: ${l.teacher || ""}\\nФормат: ${l.type || ""}\\nМТС Линк: ${l.link || ""}`);
+          icsLines.push(`UID:ranepa-m25u-${dateStr}-${startStr.replace(":", "")}@ranepa.ru`);
+          icsLines.push(`DTSTAMP:${stamp}`);
+          icsLines.push(`DTSTART:${icsUtcStamp(mskToDate(dateStr, startStr))}`);
+          icsLines.push(`DTEND:${icsUtcStamp(mskToDate(dateStr, endStr))}`);
+          icsLines.push(`SUMMARY:${icsEscape(l.subject)}`);
+          const description = [
+            `Преподаватель: ${l.teacher || ""}`,
+            `Формат: ${l.type || ""}`,
+            `МТС Линк: ${l.link || ""}`
+          ].join("\n");
+          icsLines.push(`DESCRIPTION:${icsEscape(description)}`);
           if (l.link) {
-            icsLines.push(`LOCATION:${l.link}`);
+            icsLines.push(`LOCATION:${icsEscape(l.link)}`);
             icsLines.push(`URL:${l.link}`);
           }
           // Системный будильник за 15 минут до пары
           icsLines.push("BEGIN:VALARM");
           icsLines.push("ACTION:DISPLAY");
-          icsLines.push(`DESCRIPTION:Скоро пара: ${l.subject}`);
+          icsLines.push(`DESCRIPTION:${icsEscape("Скоро пара: " + l.subject)}`);
           icsLines.push("TRIGGER:-PT15M");
           icsLines.push("END:VALARM");
-
           icsLines.push("END:VEVENT");
         }
       }
 
       icsLines.push("END:VCALENDAR");
-      const icsData = icsLines.join("\r\n");
-
-      const blob = new Blob([icsData], { type: "text/calendar;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "ranepa_m25u_schedule.ics");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-
+      downloadIcs(icsLines, "ranepa_m25u_schedule.ics");
       showToast("Файл расписания скачан! Откройте его на телефоне");
     });
 
@@ -2943,13 +2815,9 @@
     // Экспорт отдельной заметки в календарь iOS / Android
     function exportNoteToCalendar(noteText, isoStr) {
       try {
-        const d = new Date(isoStr);
-        const pad = (n) => String(n).padStart(2, '0');
-        const dtStart = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
-        const endD = new Date(d.getTime() + 30 * 60000);
-        const dtEnd = `${endD.getFullYear()}${pad(endD.getMonth()+1)}${pad(endD.getDate())}${pad(endD.getHours())}${pad(endD.getMinutes())}00`;
-
-        const cleanText = (noteText || "Заметка").replace(/[\r\n]+/g, " ").replace(/[;,]/g, " ");
+        const start = new Date(isoStr);
+        const end = new Date(start.getTime() + 30 * 60000);
+        const text = (noteText || "Заметка").replace(/[\r\n]+/g, " ");
 
         const icsLines = [
           "BEGIN:VCALENDAR",
@@ -2958,12 +2826,12 @@
           "CALSCALE:GREGORIAN",
           "METHOD:PUBLISH",
           "BEGIN:VEVENT",
-          `UID:note-${Date.now()}-${Math.random().toString(36).substr(2, 6)}@ranepa.ru`,
-          `DTSTAMP:${dtStart}Z`,
-          `DTSTART;TZID=Europe/Moscow:${dtStart}`,
-          `DTEND;TZID=Europe/Moscow:${dtEnd}`,
-          `SUMMARY:📌 ${cleanText}`,
-          `DESCRIPTION:Напоминание по заметке РАНХиГС М25-У: ${cleanText}`,
+          `UID:note-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@ranepa.ru`,
+          `DTSTAMP:${icsUtcStamp(new Date())}`,
+          `DTSTART:${icsUtcStamp(start)}`,
+          `DTEND:${icsUtcStamp(end)}`,
+          `SUMMARY:${icsEscape("📌 " + text)}`,
+          `DESCRIPTION:${icsEscape("Напоминание по заметке РАНХиГС М25-У: " + text)}`,
           "BEGIN:VALARM",
           "ACTION:DISPLAY",
           "DESCRIPTION:Напоминание",
@@ -2973,15 +2841,7 @@
           "END:VCALENDAR"
         ];
 
-        const blob = new Blob([icsLines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `reminder.ics`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        downloadIcs(icsLines, "reminder.ics");
         showToast("Нажми «Добавить», чтобы телефон зазвенел в установленное время!");
       } catch(e) {
         showToast("⚠️ Ошибка экспорта в календарь");
@@ -3040,7 +2900,7 @@
         item.innerHTML = `
           <div class="note-checkbox">${n.done ? `<svg class="svg-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>` : ""}</div>
           <div class="note-content">
-            <div class="note-text">${n.text}</div>
+            <div class="note-text">${escapeHtml(n.text)}</div>
             ${timeBadgeHtml}
           </div>
           <button class="btn-del-note" title="Удалить" aria-label="Удалить"><svg class="svg-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
@@ -3152,8 +3012,35 @@
       });
     }
 
+    // Загрузка расписания из schedule.json (с копией в localStorage на случай офлайна)
+    async function loadSchedule() {
+      const CACHE_KEY = "ranepa_schedule_cache";
+      let data = null;
+      try {
+        const res = await fetch("./schedule.json", { cache: "no-cache" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        data = await res.json();
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch (e) {}
+      } catch (e) {
+        try { data = JSON.parse(localStorage.getItem(CACHE_KEY) || "null"); } catch (e2) {}
+      }
+
+      if (!data) {
+        document.getElementById("lessonsContainer").innerHTML = `
+          <div class="empty-state">
+            <div class="empty-title">Не удалось загрузить расписание</div>
+            <div class="empty-desc">Проверьте интернет и обновите страницу.</div>
+          </div>`;
+        return;
+      }
+
+      SCHEDULE = data;
+      availableDates = Object.keys(SCHEDULE).sort();
+      renderDay(selectedDateKey);
+    }
+
     // Первоначальный запуск
-    renderDay(selectedDateKey);
+    loadSchedule();
     updatePushUI();
   </script>
 </body>
